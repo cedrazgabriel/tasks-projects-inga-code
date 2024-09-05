@@ -11,7 +11,7 @@ using TaskManager.Domain.Entities;
 
 namespace TaskManager.Application.UseCases
 {
-    public class CreateUserUseCase (IUserRepository usersRepository, IHashGenerator hashGenerator, IAuthService authService)
+    public class CreateUserUseCase (IUserRepository usersRepository,ICollaboratorRepository collaboratorRepository, IHashGenerator hashGenerator, IAuthService authService)
     {
         public async Task<string> Execute(string username, string password)
         {
@@ -26,6 +26,10 @@ namespace TaskManager.Application.UseCases
             var user = new User(username, hashedPassword);
 
             await usersRepository.CreateAsync(user);
+
+            var collaborator = new Collaborator(user.UserName, user.Id);
+
+            await collaboratorRepository.CreateAsync(collaborator);
 
             var jwtToken = await authService.GenerateJwtToken(user.UserName);
 

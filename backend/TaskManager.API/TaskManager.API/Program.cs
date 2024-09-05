@@ -53,7 +53,39 @@ builder.Services.AddDbContext<TaskManagerDbContext>(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IHashGenerator, HashGenerator>();
 builder.Services.AddScoped<IHashCompare, HashCompare>();
+
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ICollaboratorRepository, CollaboratorRepository>();
+
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Task Manager API",
+        Description = "API para gerenciar tarefas e usuários.",
+        Contact = new Microsoft.OpenApi.Models.OpenApiContact
+        {
+            Name = "Gabriel Cedraz",
+            Email = "cedrazdev@gmail.com",
+        }
+    });
+
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Insira o token JWT no campo 'Authorization'. Exemplo: 'Bearer {token}'",
+    });
+
+    options.EnableAnnotations();
+});
+
 
 var app = builder.Build();
 
