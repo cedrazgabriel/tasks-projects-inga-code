@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TaskManager.Domain.Entities
+namespace TaskManager.Application.Services
 {
-    public class BaseEntity
+    public interface IAuthService
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        Task<string> GenerateJwtToken(string username);
     }
 }
