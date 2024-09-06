@@ -131,7 +131,7 @@ namespace TaskManager.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation(Summary = "Deletar projeto", Description = "Este endpoint é usado para deletar um projeto específico da plataforma.")]
-        public async Task<IActionResult> DeleteProject(Guid id)
+        public async Task<ActionResult<BasicResponse>> DeleteProject(Guid id)
         {
             if (id == Guid.Empty || !Guid.TryParse(id.ToString(), out var projectId))
             {
@@ -142,7 +142,12 @@ namespace TaskManager.API.Controllers
 
             var projectDeleted = await useCase.Execute(projectId);
 
-            return Ok("Project deleted successfully.");
+            var response = new BasicResponse()
+            {
+                message = "Project deleted successfully."
+            };
+
+            return Ok(response); 
         }
 
     }
