@@ -4,9 +4,9 @@ using TaskManager.Domain.Entities;
 
 namespace TaskManager.Infrastructure.Persistence.Configurations
 {
-    public class TaskConfigurations : IEntityTypeConfiguration<Domain.Entities.Task>
+    public class TaskConfigurations : IEntityTypeConfiguration<Domain.Entities.TaskProject>
     {
-        public void Configure(EntityTypeBuilder<Domain.Entities.Task> builder)
+        public void Configure(EntityTypeBuilder<Domain.Entities.TaskProject> builder)
         {
            
             builder.ToTable("tasks");
@@ -24,7 +24,8 @@ namespace TaskManager.Infrastructure.Persistence.Configurations
 
             builder.Property(t => t.CreatedAt)
                 .HasColumnName("created_at")
-                .IsRequired();
+                .IsRequired()
+                 .HasDefaultValueSql("NOW()");
 
             builder.Property(t => t.UpdatedAt)
                 .HasColumnName("updated_at");

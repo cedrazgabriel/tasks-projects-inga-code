@@ -19,7 +19,7 @@ namespace TaskManager.Infrastructure.Persistence
         public DbSet<Collaborator> Collaborators { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Project> Projects { get; set; }
-        public DbSet<Domain.Entities.Task> Tasks { get; set; }
+        public DbSet<Domain.Entities.TaskProject> Tasks { get; set; }
         public DbSet<TimeTracker> TimeTrackers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

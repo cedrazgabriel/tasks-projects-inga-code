@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 using TaskManager.Application.UseCases.Errors;
 
 namespace TaskManager.API.Middlewares
@@ -25,6 +26,11 @@ namespace TaskManager.API.Middlewares
                 _logger.LogError(ex, "Application error occurred.");
                 await HandleApplicationExceptionAsync(httpContext, ex);
             }
+            catch (FluentValidation.ValidationException ex) // Captura erros de validação do FluentValidation
+            {
+                _logger.LogError(ex, "Validation error occurred.");
+                await HandleValidationExceptionAsync(httpContext, ex);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An unhandled exception has occurred.");
@@ -41,6 +47,27 @@ namespace TaskManager.API.Middlewares
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = exception.StatusCode;
+
+            return context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(response));
+        }
+
+        // Novo método para tratar erros de validação do FluentValidation
+        private Task HandleValidationExceptionAsync(HttpContext context, FluentValidation.ValidationException exception)
+        {
+            var errors = exception.Errors.Select(e => new
+            {
+                Property = e.PropertyName,
+                Error = e.ErrorMessage
+            }).ToList();
+
+            var response = new
+            {
+                message = "Validation failed",
+                errors
+            };
+
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
 
             return context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(response));
         }

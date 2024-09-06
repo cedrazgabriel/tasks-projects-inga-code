@@ -11,7 +11,7 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
 {
     public class UserRepository(TaskManagerDbContext dbContext) : IUserRepository
     {
-        public async System.Threading.Tasks.Task CreateAsync(User user)
+        public async Task CreateAsync(User user)
         {
             await dbContext.Users.AddAsync(user);
             await dbContext.SaveChangesAsync();

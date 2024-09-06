@@ -15,7 +15,7 @@ namespace TaskManager.Domain.Entities
         public DateTime? UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
         public Guid TaskId { get; set; }
-        public Task Task { get; set; }
+        public TaskProject Task { get; set; }
 
         public Guid CollaboratorId { get; set; }
         public Collaborator Collaborator { get; set; }

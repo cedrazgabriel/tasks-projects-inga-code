@@ -1,3 +1,5 @@
+using FluentValidation.AspNetCore;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +12,7 @@ using TaskManager.Application.Services;
 using TaskManager.Infrastructure.Cryptograph;
 using TaskManager.Infrastructure.Persistence;
 using TaskManager.Infrastructure.Persistence.Repositories;
+using TaskManager.API.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,7 +60,11 @@ builder.Services.AddScoped<IHashCompare, HashCompare>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICollaboratorRepository, CollaboratorRepository>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<UserRegisterRequestValidator>();
 
 builder.Services.AddSwaggerGen(options =>
 {
