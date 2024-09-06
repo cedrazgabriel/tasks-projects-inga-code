@@ -91,5 +91,59 @@ namespace TaskManager.API.Controllers
 
             return CreatedAtAction(nameof(CreateProject), new { id = project.Id }, response);
         }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProjectResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Atualizar projeto", Description = "Este endpoint é usado para atualizar um projeto existente na plataforma.")]
+        public async Task<ActionResult<ProjectResponse>> UpdateProject(Guid id, [FromBody] UpdateProjectRequest request)
+        {
+            if (id == Guid.Empty || !Guid.TryParse(id.ToString(), out var projectId))
+            {
+                return BadRequest("The ID provided is not valid.");
+            }
+
+            var useCase = new UpdateProjectUseCase(projectRepository);
+
+            var project = await useCase.Execute(projectId, request.Name);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            var response = new ProjectResponse
+            {
+                Id = project.Id.ToString(),
+                Name = project.Name,
+                CreatedAt = project.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
+                UpdatedAt = project.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss") 
+            };
+
+            return Ok(response);
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation(Summary = "Deletar projeto", Description = "Este endpoint é usado para deletar um projeto específico da plataforma.")]
+        public async Task<IActionResult> DeleteProject(Guid id)
+        {
+            if (id == Guid.Empty || !Guid.TryParse(id.ToString(), out var projectId))
+            {
+                return BadRequest("The ID provided is not valid.");
+            }
+
+            var useCase = new DeleteProjectUseCase(projectRepository);
+
+            var projectDeleted = await useCase.Execute(projectId);
+
+            return Ok("Project deleted successfully.");
+        }
+
     }
 }

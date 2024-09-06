@@ -35,9 +35,21 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
             };
         }
 
-        public Task<Project> GetProjectById(Guid id)
+        public Task<Project> GetProjectByIdAsync(Guid id)
         {
             return dbContext.Projects.FirstOrDefaultAsync(project => project.Id == id);
+        }
+
+        public async Task UpdateAsync(Project project)
+        {
+            dbContext.Projects.Update(project);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Project project)
+        {
+            dbContext.Projects.Remove(project);
+            await dbContext.SaveChangesAsync();
         }
     }
 }

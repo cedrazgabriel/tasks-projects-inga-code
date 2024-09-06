@@ -12,6 +12,8 @@ namespace TaskManager.Application.Repositories.Contracts
     {
         public Task CreateAsync(Project project);
         public Task<PaginatedResult<Project>> GetPaginatedProjectsAsync(int page, int pageSize);
-        public Task<Project> GetProjectById(Guid id);
+        public Task<Project> GetProjectByIdAsync(Guid id);
+        public Task UpdateAsync(Project project);
+        public Task DeleteAsync(Project projectId);
     }
 }

@@ -26,7 +26,7 @@ namespace TaskManager.Infrastructure.Persistence.Configurations
 
             builder.Property(p => p.UpdatedAt)
                 .HasColumnName("updated_at");
-
+              
             builder.Property(p => p.DeletedAt)
                 .HasColumnName("deleted_at");
 

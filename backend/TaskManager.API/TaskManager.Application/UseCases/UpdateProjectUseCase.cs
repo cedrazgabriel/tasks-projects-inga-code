@@ -9,16 +9,21 @@ using TaskManager.Domain.Entities;
 
 namespace TaskManager.Application.UseCases
 {
-    public class GetProjectByIdUseCase(IProjectRepository projectRepository)
+    public class UpdateProjectUseCase(IProjectRepository projectRepository)
     {
-        public async Task<Project> Execute(Guid projectId)
+        public async Task<Project> Execute(Guid projectId, string newName)
         {
             var project = await projectRepository.GetProjectByIdAsync(projectId);
 
-            if(project is null)
+            if (project is null)
             {
                 throw new ResourceNotFoundError();
             }
+
+            project.Name = newName;
+            project.UpdatedAt = DateTime.Now;
+          
+            await projectRepository.UpdateAsync(project);
 
             return project;
         }

@@ -31,7 +31,9 @@ namespace TaskManager.Infrastructure.Persistence.Configurations
                 .HasDefaultValueSql("NOW()"); 
 
             builder.Property(u => u.UpdatedAt)
-                .HasColumnName("updated_at");
+                .HasColumnName("updated_at")
+                .ValueGeneratedOnAddOrUpdate()
+                .HasDefaultValueSql("NOW()");
 
             builder.Property(u => u.DeletedAt)
                 .HasColumnName("deleted_at");
