@@ -34,5 +34,10 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
                 Items = projects
             };
         }
+
+        public Task<Project> GetProjectById(Guid id)
+        {
+            return dbContext.Projects.FirstOrDefaultAsync(project => project.Id == id);
+        }
     }
 }

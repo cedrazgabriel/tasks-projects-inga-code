@@ -43,6 +43,32 @@ namespace TaskManager.API.Controllers
             return Ok(response);
         }
 
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProjectResponse))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Consultar projeto por ID", Description = "Este endpoint é usado para consultar um projeto específico na plataforma utilizando o ID do projeto.")]
+        public async Task<ActionResult<ProjectResponse>> GetProjectById(Guid id)
+        {
+            var useCase = new GetProjectByIdUseCase(projectRepository);
+
+            var project = await useCase.Execute(id);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            var response = new ProjectResponse
+            {
+                Id = project.Id.ToString(),
+                Name = project.Name,
+                CreatedAt = project.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")
+            };
+
+            return Ok(response);
+        }
+
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CreateProjectResponse))]
