@@ -9,6 +9,6 @@ namespace TaskManager.Application.Repositories.Contracts
 {
     public interface ICollaboratorRepository
     {
-        public System.Threading.Tasks.Task CreateAsync(Collaborator collaborator);
+        public Task CreateAsync(Collaborator collaborator);
     }
 }
