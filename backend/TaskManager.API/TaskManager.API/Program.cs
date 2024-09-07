@@ -13,6 +13,7 @@ using TaskManager.Infrastructure.Cryptograph;
 using TaskManager.Infrastructure.Persistence;
 using TaskManager.Infrastructure.Persistence.Repositories;
 using TaskManager.API.Validators;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,10 +87,21 @@ builder.Services.AddSwaggerGen(options =>
     {
         Name = "Authorization",
         Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
-        Scheme = "bearer",
+        Scheme = "Bearer",
         BearerFormat = "JWT",
         In = Microsoft.OpenApi.Models.ParameterLocation.Header,
         Description = "Insira o token JWT no campo 'Authorization'. Exemplo: 'Bearer {token}'",
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement{
+    {
+        new OpenApiSecurityScheme{
+            Reference = new OpenApiReference{
+                Type = ReferenceType.SecurityScheme,
+                Id = "Bearer"}
+            },
+            new string[] {}
+        }
     });
 
     options.EnableAnnotations();

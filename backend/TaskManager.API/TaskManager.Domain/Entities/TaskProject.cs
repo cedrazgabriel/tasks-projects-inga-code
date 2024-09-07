@@ -8,6 +8,15 @@ namespace TaskManager.Domain.Entities
 {
     public class TaskProject : BaseEntity
     {
+        private TaskProject() { }
+
+        public TaskProject(string name, string description, Guid projectId)
+        {
+            Name  = name;
+            Description = description;
+            ProjectId = projectId;
+        }
+
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }

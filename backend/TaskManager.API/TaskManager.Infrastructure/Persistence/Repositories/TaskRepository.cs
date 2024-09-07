@@ -13,7 +13,7 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
     {
         public async Task<PaginatedResult<TaskProject>> GetAllTasksAsync(int page, int pageSize)
         {
-            var totalRecords = await dbContext.Tasks.AsNoTracking().CountAsync(); // Adiciona o AsNoTracking na contagem
+            var totalRecords = await dbContext.Tasks.AsNoTracking().CountAsync(); 
             var tasks = await dbContext.Tasks
                 .AsNoTracking() 
                 .Skip((page - 1) * pageSize)
@@ -50,6 +50,29 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
                 TotalRecords = totalRecords,
                 Items = tasks
             };
+        }
+
+        public async Task<TaskProject> GetTaskByIdAsync(Guid id)
+        {
+            return await dbContext.Tasks.Where(task => task.Id == id).FirstOrDefaultAsync();
+        }
+
+        public async Task CreateTaskAsync(TaskProject task)
+        {
+                await dbContext.Tasks.AddAsync(task);
+                await dbContext.SaveChangesAsync();  
+        }
+
+        public async Task UpdateTaskAsync(TaskProject task)
+        {
+            dbContext.Tasks.Update(task);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteTaskAsync(TaskProject task)
+        {
+            dbContext.Tasks.Remove(task);
+            await dbContext.SaveChangesAsync();
         }
     }
 }

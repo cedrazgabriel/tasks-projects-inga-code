@@ -9,15 +9,11 @@ namespace TaskManager.API.Validators
         {
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("O campo 'Name' é obrigatório.")
-                .MaximumLength(100).WithMessage("O campo 'Name' não pode ter mais de 100 caracteres.");
+                .MaximumLength(250).WithMessage("O campo 'Name' não pode ter mais de 250 caracteres.");
 
             RuleFor(x => x.Description)
                 .NotEmpty().WithMessage("O campo 'Description' é obrigatório.");
 
-            RuleFor(x => x.ProjectId)
-                .NotEmpty().WithMessage("O campo 'ProjectId' é obrigatório.")
-                .Must(projectId => Guid.TryParse(projectId.ToString(), out _))
-                .WithMessage("O campo 'ProjectId' precisa ser um GUID válido.");
         }
     }
 }

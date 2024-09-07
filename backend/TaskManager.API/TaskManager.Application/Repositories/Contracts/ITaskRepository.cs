@@ -13,8 +13,8 @@ namespace TaskManager.Application.Repositories.Contracts
         Task<PaginatedResult<TaskProject>> GetAllTasksAsync(int page, int pageSize);
         Task<PaginatedResult<TaskProject>> GetAllTasksByProjectIdAsync(int page, int pageSize, Guid projectId);
         Task<TaskProject> GetTaskByIdAsync(Guid id);
-        //Task CreateTaskAsync(TaskProject task);
-        //Task UpdateTaskAsync(TaskProject task);
-        //Task DeleteTaskAsync(int id);
+        Task CreateTaskAsync(TaskProject task);
+        Task UpdateTaskAsync(TaskProject task);
+        Task DeleteTaskAsync(TaskProject id);
     }
 }

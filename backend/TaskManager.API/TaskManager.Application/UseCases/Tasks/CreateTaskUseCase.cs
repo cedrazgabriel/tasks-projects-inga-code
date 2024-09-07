@@ -11,9 +11,9 @@ using TaskManager.Application.UseCases.Errors;
 
 namespace TaskManager.Application.UseCases.Tasks
 {
-    public class GetTasksByProjectIdUseCase(ITaskRepository taskRepository, IProjectRepository projectRepository)
+    public class CreateTaskUseCase(ITaskRepository taskRepository, IProjectRepository projectRepository)
     {
-        public async Task<PaginatedResult<TaskProject>> Execute(Guid projectId, int page, int pageSize)
+        public async Task<TaskProject> Execute(string name, string description, Guid projectId)
         {
             var project = await projectRepository.GetProjectByIdAsync(projectId);
 
@@ -22,9 +22,11 @@ namespace TaskManager.Application.UseCases.Tasks
                 throw new ResourceNotFoundError();
             }
 
-            var tasks = await taskRepository.GetAllTasksByProjectIdAsync(page, pageSize, projectId);
+            var task = new TaskProject(name, description, projectId);
 
-            return tasks;
+            await taskRepository.CreateTaskAsync(task);
+
+            return task;
         }
     }
 }

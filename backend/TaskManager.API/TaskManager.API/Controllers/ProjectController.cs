@@ -5,7 +5,7 @@ using TaskManager.API.DTO.Request;
 using TaskManager.API.DTO.Response;
 using TaskManager.Application.Repositories.Contracts;
 using TaskManager.Application.Services;
-using TaskManager.Application.UseCases;
+using TaskManager.Application.UseCases.Projects;
 using Microsoft.AspNetCore.Authorization;
 using System.Reflection.Metadata.Ecma335;
 

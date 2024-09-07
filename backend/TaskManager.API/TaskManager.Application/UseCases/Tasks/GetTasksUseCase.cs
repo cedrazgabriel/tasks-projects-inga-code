@@ -8,7 +8,7 @@ using TaskManager.Application.Repositories.Contracts;
 using TaskManager.Domain.Entities;
 
 
-namespace TaskManager.Application.UseCases
+namespace TaskManager.Application.UseCases.Tasks
 {
     public class GetTasksUseCase(ITaskRepository tasksRepository)
     {

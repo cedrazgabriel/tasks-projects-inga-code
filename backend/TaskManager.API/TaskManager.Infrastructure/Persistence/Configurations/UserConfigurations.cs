@@ -16,14 +16,16 @@ namespace TaskManager.Infrastructure.Persistence.Configurations
 
             builder.Property(u => u.UserName)
                 .HasColumnName("username")
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(250);
 
             builder.HasIndex(u => u.UserName)
                 .IsUnique();
 
             builder.Property(u => u.Password)
                 .HasColumnName("password")
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(512);
 
             builder.Property(u => u.CreatedAt)
                 .HasColumnName("created_at")

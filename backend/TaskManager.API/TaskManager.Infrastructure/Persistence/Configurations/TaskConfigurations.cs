@@ -17,7 +17,8 @@ namespace TaskManager.Infrastructure.Persistence.Configurations
          
             builder.Property(t => t.Name)
                 .HasColumnName("name")
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(250); ;
 
             builder.Property(t => t.Description)
                 .HasColumnName("description");

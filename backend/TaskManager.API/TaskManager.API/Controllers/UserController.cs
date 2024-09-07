@@ -7,7 +7,7 @@ using TaskManager.API.DTO.Response;
 using TaskManager.Application.Cryptograph.Contracts;
 using TaskManager.Application.Repositories.Contracts;
 using TaskManager.Application.Services;
-using TaskManager.Application.UseCases;
+using TaskManager.Application.UseCases.Users;
 
 namespace TaskManager.API.Controllers
 {
