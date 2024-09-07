@@ -7,7 +7,7 @@ using TaskManager.Application.Repositories.Contracts;
 using TaskManager.Application.UseCases.Errors;
 using TaskManager.Domain.Entities;
 
-namespace TaskManager.Application.UseCases
+namespace TaskManager.Application.UseCases.Projects
 {
     public class UpdateProjectUseCase(IProjectRepository projectRepository)
     {
@@ -22,7 +22,7 @@ namespace TaskManager.Application.UseCases
 
             project.Name = newName;
             project.UpdatedAt = DateTime.Now;
-          
+
             await projectRepository.UpdateAsync(project);
 
             return project;

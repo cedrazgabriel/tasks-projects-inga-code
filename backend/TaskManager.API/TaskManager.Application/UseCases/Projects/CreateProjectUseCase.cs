@@ -1,7 +1,7 @@
 ﻿using TaskManager.Application.Repositories.Contracts;
 using TaskManager.Domain.Entities;
 
-namespace TaskManager.Application.UseCases
+namespace TaskManager.Application.UseCases.Projects
 {
     public class CreateProjectUseCase(IProjectRepository projectRepository)
     {
@@ -14,4 +14,4 @@ namespace TaskManager.Application.UseCases
             return project;
         }
     }
-} 
+}

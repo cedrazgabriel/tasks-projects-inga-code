@@ -9,15 +9,16 @@ using TaskManager.Application.Services;
 using TaskManager.Application.UseCases.Errors;
 using TaskManager.Domain.Entities;
 
-namespace TaskManager.Application.UseCases
+namespace TaskManager.Application.UseCases.Users
 {
-    public class CreateUserUseCase (IUserRepository usersRepository,ICollaboratorRepository collaboratorRepository, IHashGenerator hashGenerator, IAuthService authService)
+    public class CreateUserUseCase(IUserRepository usersRepository, ICollaboratorRepository collaboratorRepository, IHashGenerator hashGenerator, IAuthService authService)
     {
         public async Task<string> Execute(string username, string password)
         {
             var userWithSameUsername = await usersRepository.FindByUserNameAsync(username);
 
-            if (userWithSameUsername != null) {
+            if (userWithSameUsername != null)
+            {
                 throw new UserAlreadyExistsError();
             }
 

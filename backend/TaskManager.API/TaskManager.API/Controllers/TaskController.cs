@@ -1,16 +1,18 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Threading.Tasks;
 using TaskManager.API.DTO.Response;
 using TaskManager.Application.Repositories.Contracts;
 using TaskManager.Application.UseCases;
+using TaskManager.Application.UseCases.Tasks;
 using TaskManager.Infrastructure.Persistence.Repositories;
 
 namespace TaskManager.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TaskController(ITaskRepository taskRepository) : ControllerBase
+    public class TaskController(ITaskRepository taskRepository, IProjectRepository projectRepository) : ControllerBase
     {
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaginatedResult<TaskResponse>))]
@@ -46,7 +48,7 @@ namespace TaskManager.API.Controllers
         [SwaggerOperation(Summary = "Consultar tasks por ProjectId", Description = "Este endpoint é usado para consultar todas as tasks associadas a um projeto.")]
         public async Task<ActionResult<PaginatedResult<TaskResponse>>> GetTasksByProjectId(Guid projectId, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var useCase = new GetTasksByProjectIdUseCase(taskRepository);
+            var useCase = new GetTasksByProjectIdUseCase(taskRepository, projectRepository);
 
             var tasks = await useCase.Execute(projectId, page, pageSize);
 
@@ -63,6 +65,28 @@ namespace TaskManager.API.Controllers
                     ProjectId = task.ProjectId.ToString(),
                     CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")
                 }).ToList()
+            };
+
+            return Ok(response);
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TaskResponse))]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Consultar task por id", Description = "Este endpoint é usado para consultar uma task específica por id.")]
+        public async Task<ActionResult<TaskResponse>> GetTaskById(Guid id)
+        {
+            var useCase = new GetTaskByIdUseCase(taskRepository);
+
+            var task = await useCase.Execute(id);
+
+            var response = new TaskResponse
+            {
+                Id = task.Id.ToString(),
+                Name = task.Name,
+                Description = task.Description,
+                ProjectId = task.ProjectId.ToString(),
+                CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")
             };
 
             return Ok(response);

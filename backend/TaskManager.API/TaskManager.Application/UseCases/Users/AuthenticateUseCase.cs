@@ -9,7 +9,7 @@ using TaskManager.Application.Services;
 using TaskManager.Application.UseCases.Errors;
 using TaskManager.Domain.Entities;
 
-namespace TaskManager.Application.UseCases
+namespace TaskManager.Application.UseCases.Users
 {
     public class AuthenticateUseCase(IUserRepository usersRepository, IHashCompare hashCompare, IAuthService authService)
     {
@@ -24,7 +24,7 @@ namespace TaskManager.Application.UseCases
 
             var isPasswordValid = await hashCompare.CompareAsync(password, user.Password);
 
-            if(!isPasswordValid)
+            if (!isPasswordValid)
             {
                 throw new WrongCredentialsError();
             }

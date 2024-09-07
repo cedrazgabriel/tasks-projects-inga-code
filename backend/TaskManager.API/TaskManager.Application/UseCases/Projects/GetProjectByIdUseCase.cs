@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using TaskManager.Application.Repositories.Contracts;
 using TaskManager.Application.UseCases.Errors;
+using TaskManager.Domain.Entities;
 
-namespace TaskManager.Application.UseCases
+namespace TaskManager.Application.UseCases.Projects
 {
-    public class DeleteProjectUseCase(IProjectRepository projectRepository)
+    public class GetProjectByIdUseCase(IProjectRepository projectRepository)
     {
-        public async Task<bool> Execute(Guid projectId)
+        public async Task<Project> Execute(Guid projectId)
         {
             var project = await projectRepository.GetProjectByIdAsync(projectId);
 
@@ -19,10 +20,7 @@ namespace TaskManager.Application.UseCases
                 throw new ResourceNotFoundError();
             }
 
-            await projectRepository.DeleteAsync(project);
-
-            return true;
+            return project;
         }
     }
-   
 }

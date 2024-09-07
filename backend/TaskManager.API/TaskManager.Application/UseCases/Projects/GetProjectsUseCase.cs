@@ -7,7 +7,7 @@ using TaskManager.API.DTO.Response;
 using TaskManager.Application.Repositories.Contracts;
 using TaskManager.Domain.Entities;
 
-namespace TaskManager.Application.UseCases
+namespace TaskManager.Application.UseCases.Projects
 {
     public class GetProjectsUseCase(IProjectRepository projectsRepository)
     {
