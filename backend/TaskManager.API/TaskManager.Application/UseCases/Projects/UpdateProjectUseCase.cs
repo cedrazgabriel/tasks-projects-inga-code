@@ -21,7 +21,7 @@ namespace TaskManager.Application.UseCases.Projects
             }
 
             project.Name = newName;
-            project.UpdatedAt = DateTime.Now;
+            project.UpdatedAt = DateTime.UtcNow;
 
             await projectRepository.UpdateAsync(project);
 

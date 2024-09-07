@@ -39,7 +39,8 @@ namespace TaskManager.API.Controllers
                     Name = task.Name,
                     Description = task.Description,
                     ProjectId = task.ProjectId.ToString(),
-                    CreatedAt = task.CreatedAt.ToString("yyyy-mm-dd HH:mm:ss")
+                    CreatedAt = task.CreatedAt.ToString("yyyy-mm-dd HH:mm:ss"),
+                    UpdatedAt = task.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss")
                 }).ToList()
             };
 
@@ -68,7 +69,8 @@ namespace TaskManager.API.Controllers
                     Name = task.Name,
                     Description = task.Description,
                     ProjectId = task.ProjectId.ToString(),
-                    CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")
+                    CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
+                    UpdatedAt = task.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss")
                 }).ToList()
             };
 
@@ -92,7 +94,8 @@ namespace TaskManager.API.Controllers
                 Name = task.Name,
                 Description = task.Description,
                 ProjectId = task.ProjectId.ToString(),
-                CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")
+                CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
+                UpdatedAt = task.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss")
             };
 
             return Ok(response);
@@ -144,6 +147,7 @@ namespace TaskManager.API.Controllers
                 Id = task.Id.ToString(),
                 Name = task.Name,
                 Description = task.Description,
+                ProjectId = task.ProjectId.ToString(),
                 CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
                 UpdatedAt = task.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss")
             };
