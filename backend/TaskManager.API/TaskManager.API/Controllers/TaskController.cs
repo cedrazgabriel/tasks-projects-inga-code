@@ -16,6 +16,7 @@ namespace TaskManager.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
+    [SwaggerTag("Gerencia as tasks da aplicação")]
     public class TaskController(ITaskRepository taskRepository, IProjectRepository projectRepository) : ControllerBase
     {
         [HttpGet]

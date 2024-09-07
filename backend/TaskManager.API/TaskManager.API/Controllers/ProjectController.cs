@@ -14,6 +14,7 @@ namespace TaskManager.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
+    [SwaggerTag("Gerencia os projetos da aplicação")] 
     public class ProjectController(IProjectRepository projectRepository) : ControllerBase
     {
 

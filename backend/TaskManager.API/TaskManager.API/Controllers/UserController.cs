@@ -13,6 +13,7 @@ namespace TaskManager.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [SwaggerTag("Gerencia os usuários e autenticação da aplicação")]
     public class UserController(IUserRepository userRepository,
         ICollaboratorRepository collaboratorRepository,
         IHashGenerator hashGenerator,
