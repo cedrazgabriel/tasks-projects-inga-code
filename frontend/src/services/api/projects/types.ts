@@ -13,3 +13,7 @@ export interface GetProjectsResponse {
     items: Project[];
 }
 
+export interface UpdateProjectRequest {
+    name: string;
+}
+

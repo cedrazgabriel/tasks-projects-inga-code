@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import LoginForm from '../components/LoginForm.vue';
 import MainPage from '../components/MainPage.vue';
 import { AuthService } from '../services/auth';
-import Projetos from '../components/Projetos.vue';
+import Projetos from '../components/projects/Projetos.vue';
 import Tarefas from '../components/Tarefas.vue';
 import Dashboard from '../components/Dashboard.vue';
 
