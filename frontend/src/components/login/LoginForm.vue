@@ -41,8 +41,8 @@
   <script lang="ts">
   import { defineComponent, reactive, ref } from 'vue';
   import { useRouter } from 'vue-router';
-  import { AuthService } from '../services/auth';
-  import { login } from '../services/api/user/userService';
+  import { AuthService } from '../../services/auth';
+  import { login } from '../../services/api/user/userService';
   import './LoginForm.scss'; 
   
   export default defineComponent({
