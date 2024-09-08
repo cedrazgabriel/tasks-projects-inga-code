@@ -40,8 +40,9 @@ namespace TaskManager.API.Controllers
                     Name = task.Name,
                     Description = task.Description,
                     ProjectId = task.ProjectId.ToString(),
-                    CreatedAt = task.CreatedAt.ToString("yyyy-mm-dd HH:mm:ss"),
-                    UpdatedAt = task.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss")
+                    CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
+                    UpdatedAt = task.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss"),
+                    ProjectName =  task.Project.Name,
                 }).ToList()
             };
 
@@ -71,7 +72,8 @@ namespace TaskManager.API.Controllers
                     Description = task.Description,
                     ProjectId = task.ProjectId.ToString(),
                     CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
-                    UpdatedAt = task.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss")
+                    UpdatedAt = task.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss"),
+                    ProjectName = task.Project.Name
                 }).ToList()
             };
 
@@ -96,7 +98,8 @@ namespace TaskManager.API.Controllers
                 Description = task.Description,
                 ProjectId = task.ProjectId.ToString(),
                 CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
-                UpdatedAt = task.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss")
+                UpdatedAt = task.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss"),
+                ProjectName = task.Project.Name
             };
 
             return Ok(response);
@@ -119,7 +122,8 @@ namespace TaskManager.API.Controllers
                 Name = task.Name,
                 Description = task.Description,
                 ProjectId = task.ProjectId.ToString(),
-                CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")
+                CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
+                ProjectName = task.Project.Name
             };
 
             return CreatedAtAction(nameof(CreateTask), new { id = task.Id }, response);
@@ -150,7 +154,8 @@ namespace TaskManager.API.Controllers
                 Description = task.Description,
                 ProjectId = task.ProjectId.ToString(),
                 CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
-                UpdatedAt = task.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss")
+                UpdatedAt = task.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss"),
+                ProjectName = task.Project.Name
             };
 
             return Ok(response);

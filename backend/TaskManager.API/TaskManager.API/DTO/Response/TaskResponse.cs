@@ -8,5 +8,6 @@
         public string ProjectId { get; set; }
         public string CreatedAt { get; set; }
         public string UpdatedAt { get; set; }
+        public string ProjectName { get; set; }
     }
 }

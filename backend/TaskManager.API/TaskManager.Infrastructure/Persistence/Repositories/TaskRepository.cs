@@ -15,7 +15,8 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
         {
             var totalRecords = await dbContext.Tasks.AsNoTracking().CountAsync(); 
             var tasks = await dbContext.Tasks
-                .AsNoTracking() 
+                .AsNoTracking()
+                .Include(task => task.Project)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -37,7 +38,8 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
                 .CountAsync();
 
             var tasks = await dbContext.Tasks
-                .AsNoTracking() 
+                .AsNoTracking()
+                .Include(task => task.Project)
                 .Where(task => task.ProjectId == projectId)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -54,7 +56,10 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
 
         public async Task<TaskProject> GetTaskByIdAsync(Guid id)
         {
-            return await dbContext.Tasks.Where(task => task.Id == id).FirstOrDefaultAsync();
+            return await dbContext.Tasks
+                .Include(task => task.Project)
+                .Where(task => task.Id == id)
+                .FirstOrDefaultAsync();
         }
 
         public async Task CreateTaskAsync(TaskProject task)
