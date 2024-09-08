@@ -38,6 +38,7 @@
 import { defineComponent, ref, onMounted } from 'vue';
 import { Project } from '../../services/api/projects/types';
 import { getProjectById, updateProject } from '../../services/api/projects/projectService';
+import { useToast } from 'vue-toastification';
 
 export default defineComponent({
   name: 'EditProjetoModal',
@@ -50,6 +51,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const project = ref<Project | null>(null);
     const isLoading = ref(true);
+    const toast = useToast();
 
     const fetchProject = async () => {
       isLoading.value = true;
@@ -57,7 +59,7 @@ export default defineComponent({
         const response = await getProjectById(props.projectId);
         project.value = response.data; 
       } catch (error) {
-        console.error('Erro ao carregar projeto:', error);
+        toast.error('Erro ao buscar projeto');
       } finally {
         isLoading.value = false;
       }
@@ -67,9 +69,11 @@ export default defineComponent({
       if (project.value) {
         try {
           await updateProject(project.value.id, {name: project.value.name}); 
+          toast.success('Projeto atualizado com sucesso');
           emit('close');
         } catch (error) {
-          console.error('Erro ao atualizar projeto:', error);
+          console.log(error)
+         toast.error('Erro ao atualizar projeto');
         }
       }
     };

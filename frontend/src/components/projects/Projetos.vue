@@ -78,6 +78,7 @@ import CreateProjetoModal from './CreateProjetoModal.vue';
 import {RingLoader} from  'vue3-spinner';
 import {PhPencil, PhTrash} from '@phosphor-icons/vue'
 import { createProject, deleteProject, getProjects } from '../../services/api/projects/projectService';
+import { useToast } from 'vue-toastification';
 
 
 export default defineComponent({
@@ -101,6 +102,8 @@ export default defineComponent({
     const showDeleteModal = ref(false); 
     const projectToDelete = ref<Project | null>(null); 
     const showCreateModal = ref(false);
+
+    const toast = useToast();
    
     const fetchProjects = async (page: number) => {
       isLoading.value = true;
@@ -109,27 +112,24 @@ export default defineComponent({
         projects.value = response.data.items;
         totalRecords.value = response.data.totalRecords;
       } catch (error) {
-        console.error('Erro ao buscar os projetos:', error);
+        toast.error(error);
       } finally {
         isLoading.value = false; 
       }
     };
 
-    // Função para formatar as datas
+  
     const formatDate = (dateString: string) => {
       const date = new Date(dateString);
       return date.toLocaleDateString();
     };
 
-    // Função para mudar de página
     const changePage = (page: number) => {
       if (page > 0 && page <= totalPages.value) {
         currentPage.value = page;
         fetchProjects(page); 
       }
     };
-
-    // Função para abrir o modal de edição
     const openEditModal = (project: Project) => {
       selectedProject.value = project;
       showEditModal.value = true;
@@ -141,31 +141,32 @@ export default defineComponent({
       fetchProjects(currentPage.value);
     };
 
-    // Função para confirmar exclusão
+
     const confirmDelete = (project: Project) => {
       projectToDelete.value = project;
       showDeleteModal.value = true;
     };
 
-    // Função para cancelar exclusão
+ 
     const cancelDelete = () => {
       projectToDelete.value = null;
       showDeleteModal.value = false;
     };
 
-    // Função para deletar projeto confirmando
+  
     const deleteProjectConfirmed = async () => {
       if (projectToDelete.value) {
-        isLoading.value = true; // Ativa o loading durante a exclusão
+        isLoading.value = true; 
         try {
           await deleteProject(projectToDelete.value.id); 
           fetchProjects(currentPage.value); 
         } catch (error) {
-          console.error('Erro ao deletar o projeto:', error);
+          toast.error(error);
         } finally {
-          isLoading.value = false; // Desativa o loading
-          showDeleteModal.value = false; // Fecha o modal de confirmação
-          projectToDelete.value = null; // Limpa o projeto selecionado para deletar
+          isLoading.value = false; 
+          showDeleteModal.value = false; 
+          projectToDelete.value = null;
+          toast.success('Projeto deletado com sucesso!');
         }
       }
     };
@@ -186,11 +187,13 @@ export default defineComponent({
       try {
         isLoading.value = true;
         await createProject({ name });
-        await fetchProjects(currentPage.value); 
+        await fetchProjects(currentPage.value);
+     
       } catch (error) {
-        console.error('Erro ao criar projeto:', error);
+        toast.error(error);
       } finally {
         isLoading.value = false;
+        toast.success('Projeto criado com sucesso!');
       }
     };
 

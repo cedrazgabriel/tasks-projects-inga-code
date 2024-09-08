@@ -85,6 +85,7 @@ import { Task, UpdateTaskRequest } from '../../services/api/tasks/types';
 import { createTask, deleteTask, getTasks } from '../../services/api/tasks/tasksService';
 import CreateTarefaModal from './CreateTarefaModal.vue';
 import EditTarefaModal from './EditTarefaModal.vue';
+import { useToast } from 'vue-toastification';
 
 export default defineComponent({
   name: 'Tarefas',
@@ -107,6 +108,7 @@ export default defineComponent({
     const showDeleteModal = ref(false);
     const taskToDelete = ref<Task | null>(null);
     const showCreateModal = ref(false);
+    const toast = useToast();
 
     const fetchTasks = async (page: number) => {
       isLoading.value = true;
@@ -116,6 +118,7 @@ export default defineComponent({
         totalRecords.value = response.data.totalRecords;
       } catch (error) {
         console.error('Erro ao buscar as tarefas:', error);
+        toast.error('Erro ao buscar as tarefas');
       } finally {
         isLoading.value = false;
       }
@@ -162,10 +165,12 @@ export default defineComponent({
           fetchTasks(currentPage.value);
         } catch (error) {
           console.error('Erro ao deletar a tarefa:', error);
+          toast.error('Erro ao deletar a tarefa');
         } finally {
           isLoading.value = false;
           showDeleteModal.value = false;
           taskToDelete.value = null;
+          toast.success('Tarefa deletada com sucesso');
         }
       }
     };
@@ -185,8 +190,10 @@ export default defineComponent({
         await fetchTasks(currentPage.value);
       } catch (error) {
         console.error('Erro ao criar tarefa:', error);
+        toast.error('Erro ao criar tarefa');
       } finally {
         isLoading.value = false;
+        toast.success('Tarefa criada com sucesso');
       }
     };
 

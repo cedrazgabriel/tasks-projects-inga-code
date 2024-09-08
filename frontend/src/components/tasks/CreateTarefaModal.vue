@@ -36,7 +36,8 @@
   <script lang="ts">
   import { defineComponent, ref, onMounted } from 'vue';
   import { getProjects } from '../../services/api/projects/projectService';
-  import { Project } from '../../services/api/projects/types'; // Certifique-se de que o caminho esteja correto
+  import { Project } from '../../services/api/projects/types';
+  import { useToast } from 'vue-toastification';
 
   
   export default defineComponent({
@@ -46,6 +47,7 @@
       const taskDescription = ref('');
       const selectedProjectId = ref('');
       const projects = ref<Project[]>([]); 
+      const toast = useToast();
   
       const submitForm = () => {
         if (taskName.value && selectedProjectId.value) {
@@ -55,22 +57,25 @@
             description: taskDescription.value,
             projectId: selectedProjectId.value,
           };
-          emit('create', taskData); // Emite a criação da tarefa com o projeto selecionado
+          emit('create', taskData); 
           emit('close');
         }
       };
   
       const fetchProjects = async () => {
         try {
-          const response = await getProjects(1, 100); // Buscando até 100 projetos na página 1
+          const response = await getProjects(1, 100); 
           projects.value = response.data.items;
+
+          
         } catch (error) {
           console.error('Erro ao buscar projetos:', error);
+          toast.error('Erro ao buscar projetos');
         }
       };
   
       onMounted(() => {
-        fetchProjects(); // Busca os projetos quando o componente é montado
+        fetchProjects(); 
       });
   
       return {

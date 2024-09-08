@@ -53,7 +53,7 @@ import { getTaskById, updateTask } from '../../services/api/tasks/tasksService';
 import { Task } from '../../services/api/tasks/types';
 import { Project } from '../../services/api/projects/types';
 import { getProjects } from '../../services/api/projects/projectService';
-  
+import { useToast } from 'vue-toastification';
   export default defineComponent({
     name: 'EditProjetoModal',
     props: {
@@ -67,6 +67,7 @@ import { getProjects } from '../../services/api/projects/projectService';
       const isLoading = ref(true);
       const projects = ref<Project[]>([]); 
       const selectedProjectId = ref('');
+      const toast = useToast();
   
       const fetchProjects = async () => {
         try {
@@ -74,6 +75,7 @@ import { getProjects } from '../../services/api/projects/projectService';
           projects.value = response.data.items;
         } catch (error) {
           console.error('Erro ao buscar projetos:', error);
+          toast.error('Erro ao buscar projetos');
         }
       };
 
@@ -86,6 +88,7 @@ import { getProjects } from '../../services/api/projects/projectService';
           selectedProjectId.value = task.value.projectId;
         } catch (error) {
           console.error('Erro ao carregar tarefa:', error);
+          toast.error('Erro ao carregar tarefa');
         } finally {
           isLoading.value = false;
         }
@@ -96,8 +99,10 @@ import { getProjects } from '../../services/api/projects/projectService';
           try {
             await updateTask(task.value.id, {name: task.value.name, description: task.value.description, projectId: selectedProjectId.value}); 
             emit('close');
+            toast.success('Tarefa atualizada com sucesso');
           } catch (error) {
             console.error('Erro ao atualizar projeto:', error);
+            toast.error('Erro ao atualizar projeto');
           }
         }
       };
