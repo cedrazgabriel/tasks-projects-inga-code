@@ -29,14 +29,12 @@ namespace TaskManager.Infrastructure.Persistence.Configurations
 
             builder.Property(u => u.CreatedAt)
                 .HasColumnName("created_at")
-                .IsRequired()
-                .HasDefaultValueSql("NOW()"); 
+                .IsRequired();
+
 
             builder.Property(u => u.UpdatedAt)
-                .HasColumnName("updated_at")
-                .ValueGeneratedOnAddOrUpdate()
-                .HasDefaultValueSql("NOW()");
-
+                .HasColumnName("updated_at");
+               
             builder.Property(u => u.DeletedAt)
                 .HasColumnName("deleted_at");
 

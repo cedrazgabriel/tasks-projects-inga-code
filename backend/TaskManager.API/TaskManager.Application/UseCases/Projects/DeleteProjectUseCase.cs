@@ -19,7 +19,9 @@ namespace TaskManager.Application.UseCases.Projects
                 throw new ResourceNotFoundError();
             }
 
-            await projectRepository.DeleteAsync(project);
+            project.DeletedAt = DateTime.UtcNow;
+
+            await projectRepository.UpdateAsync(project);
 
             return true;
         }

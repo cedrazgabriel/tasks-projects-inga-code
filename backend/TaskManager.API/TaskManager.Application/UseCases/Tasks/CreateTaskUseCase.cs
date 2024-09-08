@@ -23,6 +23,7 @@ namespace TaskManager.Application.UseCases.Tasks
             }
 
             var task = new TaskProject(name, description, projectId);
+            task.CreatedAt = DateTime.UtcNow;
 
             await taskRepository.CreateTaskAsync(task);
 

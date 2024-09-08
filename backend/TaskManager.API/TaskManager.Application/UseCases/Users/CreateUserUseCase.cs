@@ -25,10 +25,13 @@ namespace TaskManager.Application.UseCases.Users
             var hashedPassword = await hashGenerator.HashAsync(password);
 
             var user = new User(username, hashedPassword);
+            user.CreatedAt = DateTime.UtcNow;
 
             await usersRepository.CreateAsync(user);
 
             var collaborator = new Collaborator(user.UserName, user.Id);
+
+            collaborator.CreatedAt = DateTime.UtcNow;
 
             await collaboratorRepository.CreateAsync(collaborator);
 

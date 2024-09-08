@@ -8,6 +8,7 @@ namespace TaskManager.Application.UseCases.Projects
         public async Task<Project> Execute(string name)
         {
             var project = new Project(name);
+            project.CreatedAt = DateTime.UtcNow;
 
             await projectRepository.CreateAsync(project);
 

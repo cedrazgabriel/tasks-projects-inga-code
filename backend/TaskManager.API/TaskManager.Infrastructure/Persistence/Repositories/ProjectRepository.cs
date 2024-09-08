@@ -22,6 +22,7 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
         {
             var totalRecords = await dbContext.Projects.CountAsync();
             var projects = await dbContext.Projects
+                .Where(project => project.DeletedAt == null)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -37,7 +38,9 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
 
         public Task<Project> GetProjectByIdAsync(Guid id)
         {
-            return dbContext.Projects.FirstOrDefaultAsync(project => project.Id == id);
+            return dbContext.Projects
+                .Where(project => project.DeletedAt == null)
+                .FirstOrDefaultAsync(project => project.Id == id);
         }
 
         public async Task UpdateAsync(Project project)

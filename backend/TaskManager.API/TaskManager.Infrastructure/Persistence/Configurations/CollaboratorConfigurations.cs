@@ -17,17 +17,15 @@ namespace TaskManager.Infrastructure.Persistence.Configurations
             builder.Property(c => c.Name)
                 .HasColumnName("name")
                 .IsRequired()
-                .HasMaxLength(250); 
+                .HasMaxLength(250);
 
             builder.Property(c => c.CreatedAt)
                 .HasColumnName("created_at")
-                .IsRequired()
-                 .HasDefaultValueSql("NOW()");
+                .IsRequired();
 
             builder.Property(c => c.UpdatedAt)
-                .HasColumnName("updated_at")
-                .ValueGeneratedOnAddOrUpdate()
-                .HasDefaultValueSql("NOW()");
+                .HasColumnName("updated_at");
+                
 
             builder.Property(c => c.DeletedAt)
                 .HasColumnName("deleted_at");
@@ -42,7 +40,6 @@ namespace TaskManager.Infrastructure.Persistence.Configurations
                 .HasForeignKey<Collaborator>(c => c.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Configura o relacionamento com a coleção de TimeTrackers
             builder.HasMany(c => c.TimeTrackers)
                 .WithOne()
                 .HasForeignKey(t => t.CollaboratorId)

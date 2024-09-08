@@ -22,8 +22,8 @@ namespace TaskManager.Infrastructure.Persistence.Configurations
 
             builder.Property(p => p.CreatedAt)
                 .HasColumnName("created_at")
-                .IsRequired()
-                 .HasDefaultValueSql("NOW()");
+                .IsRequired();
+                
 
             builder.Property(p => p.UpdatedAt)
                 .HasColumnName("updated_at");

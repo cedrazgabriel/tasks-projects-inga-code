@@ -30,6 +30,7 @@ namespace TaskManager.Application.UseCases.Tasks
             task.Name = name;
             task.Description = description;
             task.ProjectId = projectId;
+            task.UpdatedAt = DateTime.UtcNow;
 
             await taskRepository.UpdateTaskAsync(task);
 
