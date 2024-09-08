@@ -10,9 +10,9 @@ using TaskManager.Application.UseCases.Errors;
 
 namespace TaskManager.Application.UseCases.TimeTrackers
 {
-    public class CreateTimeTrackerUseCase(ITaskRepository taskRepository, ITimeTrackerRepository timeTrackerRepository)
+    public class CreateTimeTrackerUseCase(ITaskRepository taskRepository, ITimeTrackerRepository timeTrackerRepository, ICollaboratorRepository collaboratorRepository)
     {
-        public async Task<TimeTracker> Execute(Guid collaboratorId, Guid taskId, DateTime startDate, DateTime endDate, string timeZoneId)
+        public async Task<TimeTracker> Execute(Guid userId, Guid taskId, DateTime startDate, DateTime endDate, string timeZoneId)
         {
             var task = await taskRepository.GetTaskByIdAsync(taskId);
 
@@ -28,11 +28,15 @@ namespace TaskManager.Application.UseCases.TimeTrackers
 
             var timeTrackers = await timeTrackerRepository.GetTimeTrackersByTaskIdAsync(task.Id);
 
-            
+
             foreach (var existingTimeTracker in timeTrackers)
             {
-                if ((startDate >= existingTimeTracker.StartDate && startDate < existingTimeTracker.EndDate) ||
-                    (endDate > existingTimeTracker.StartDate && endDate <= existingTimeTracker.EndDate))
+               
+                var adjustedStartDate = existingTimeTracker.StartDate.AddHours(-3);
+                var adjustedEndDate = existingTimeTracker.EndDate.AddHours(-3);
+
+                if ((startDate >= adjustedStartDate && startDate < adjustedEndDate) ||
+                    (endDate > adjustedStartDate && endDate <= adjustedEndDate))
                 {
                     throw new ConflictingHourError();
                 }
@@ -49,7 +53,9 @@ namespace TaskManager.Application.UseCases.TimeTrackers
                 throw new TotalHoursExceededError();
             }
 
-            var timeTracker = new TimeTracker(startDate, endDate, timeZoneId, taskId, collaboratorId);
+            var collaborator = await collaboratorRepository.GetByUserIdAsync(userId);
+
+            var timeTracker = new TimeTracker(startDate, endDate, timeZoneId, taskId, collaborator.Id);
            
             await timeTrackerRepository.CreateAsync(timeTracker);
 

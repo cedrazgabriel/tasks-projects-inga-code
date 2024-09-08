@@ -12,11 +12,10 @@ namespace TaskManager.Domain.Entities
 
         public TimeTracker(DateTime startDate, DateTime endDate, string timeZoneId, Guid taskId, Guid collaboratorId)
         {
-            StartDate = startDate;
-            EndDate = endDate;
+            StartDate = startDate.ToUniversalTime();
+            EndDate = endDate.ToUniversalTime();
             TimeZoneId = timeZoneId;
             CreatedAt = DateTime.UtcNow;
-            UpdatedAt = null;
             TaskId = taskId;
             CollaboratorId = collaboratorId;
         }

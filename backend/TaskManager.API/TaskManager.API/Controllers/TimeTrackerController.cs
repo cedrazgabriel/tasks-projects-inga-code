@@ -16,7 +16,7 @@ namespace TaskManager.API.Controllers
     [ApiController]
     [Authorize]
     [SwaggerTag("Gerencia os tempos relacionados a uma task da aplicação")]
-    public class TimeTrackerController(ITaskRepository taskRepository, ITimeTrackerRepository timeTrackerRepository) : ControllerBase
+    public class TimeTrackerController(ITaskRepository taskRepository, ITimeTrackerRepository timeTrackerRepository, ICollaboratorRepository collaboratorRepository) : ControllerBase
     {
         [HttpPost()]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TaskResponse))]
@@ -26,7 +26,7 @@ namespace TaskManager.API.Controllers
         [SwaggerOperation(Summary = "Iniciar time tracker", Description = "Inicia um time tracker de uma task específica.")]
         public async Task<ActionResult<TimeTrackerResponse>> Create([FromBody] InitTimeTrackerRequest request)
         {
-            var useCase = new CreateTimeTrackerUseCase(taskRepository, timeTrackerRepository);
+            var useCase = new CreateTimeTrackerUseCase(taskRepository, timeTrackerRepository, collaboratorRepository);
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
