@@ -35,7 +35,7 @@ namespace TaskManager.Application.UseCases.Users
 
             await collaboratorRepository.CreateAsync(collaborator);
 
-            var jwtToken = await authService.GenerateJwtToken(user.UserName);
+            var jwtToken = await authService.GenerateJwtToken(user.UserName, user.Id.ToString());
 
             return jwtToken;
         }

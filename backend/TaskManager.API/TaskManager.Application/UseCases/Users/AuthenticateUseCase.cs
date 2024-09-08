@@ -29,7 +29,7 @@ namespace TaskManager.Application.UseCases.Users
                 throw new WrongCredentialsError();
             }
 
-            var jwtToken = await authService.GenerateJwtToken(user.UserName);
+            var jwtToken = await authService.GenerateJwtToken(user.UserName, user.Id.ToString());
 
             return jwtToken;
         }

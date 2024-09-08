@@ -8,6 +8,6 @@ namespace TaskManager.Application.Services
 {
     public interface IAuthService
     {
-        Task<string> GenerateJwtToken(string username);
+        Task<string> GenerateJwtToken(string username, string id);
     }
 }

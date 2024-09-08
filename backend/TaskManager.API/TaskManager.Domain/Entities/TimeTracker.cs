@@ -8,6 +8,19 @@ namespace TaskManager.Domain.Entities
 {
     public class TimeTracker : BaseEntity
     {
+        private TimeTracker() { }
+
+        public TimeTracker(DateTime startDate, DateTime endDate, string timeZoneId, Guid taskId, Guid collaboratorId)
+        {
+            StartDate = startDate;
+            EndDate = endDate;
+            TimeZoneId = timeZoneId;
+            CreatedAt = DateTime.UtcNow;
+            UpdatedAt = null;
+            TaskId = taskId;
+            CollaboratorId = collaboratorId;
+        }
+
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string TimeZoneId { get; set; } = string.Empty;

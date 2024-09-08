@@ -11,7 +11,7 @@ namespace TaskManager.Application.Services
     public class AuthService(IConfiguration configuration): IAuthService
     {
         
-        public async Task<string> GenerateJwtToken(string username)
+        public async Task<string> GenerateJwtToken(string username, string userId)
         {
           
             var secretKey = configuration["Jwt:SecretKey"];
@@ -28,6 +28,7 @@ namespace TaskManager.Application.Services
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.NameIdentifier, userId),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
