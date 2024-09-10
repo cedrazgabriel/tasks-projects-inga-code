@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TaskManager.API.DTO.Request;
@@ -58,6 +59,33 @@ namespace TaskManager.API.Controllers
             };
 
             return CreatedAtAction(nameof(Create), new { id = timeTracker.Id }, response);
+        }
+
+
+        [HttpPost("{timeTrackerId}/stop")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TimeTrackerResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Finalizar time tracker", Description = "Finaliza um time tracker de uma task específica.")]
+        public async Task<ActionResult<TimeTrackerResponse>> Finalizate(Guid timeTrackerId)
+        {
+            var useCase = new StopTimeTrackerUseCase(timeTrackerRepository,taskRepository);
+
+            var timeTracker = await useCase.Execute(timeTrackerId);
+
+            var response = new TimeTrackerResponse
+            {
+                CollaboratorId = timeTracker.CollaboratorId.ToString(),
+                CollaboratorName = timeTracker.Collaborator.Name,
+                CreatedAt = timeTracker.CreatedAt.ToString("yyyy/MM/dd HH:mm:ss"),
+                EndDate = null,
+                Id = timeTracker.Id.ToString(),
+                StartDate = timeTracker.StartDate.ToString("yyyy/MM/dd HH:mm:ss"),
+                UpdatedAt = timeTracker.UpdatedAt?.ToString("yyyy/MM/dd HH:mm:ss")
+            };
+
+            return response;
         }
 
         [HttpGet("{taskId}")]

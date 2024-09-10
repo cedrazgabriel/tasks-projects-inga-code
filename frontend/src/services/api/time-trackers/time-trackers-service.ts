@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import apiClient from "../../apiClient";
-import { GetTimeTrackerByTaskIdResponse, TimeTrackerInitRequest } from "./types";
+import { GetTimeTrackerByTaskIdResponse, TimeTrackerInitRequest, TimeTrackerStopRequest } from "./types";
 
 export interface GetTimeTrackerByTaskIdParams {
     page: number;
@@ -12,8 +12,8 @@ export const initTimeTracker = (payload: TimeTrackerInitRequest): Promise<AxiosR
     return apiClient.post<void>(`/timetracker`, payload);
 }
 
-export const stopTimeTracker = (timeTrackerId: string): Promise<AxiosResponse<void>> => {
-    return apiClient.post<void>(`/timetracker/${timeTrackerId}/stop`);
+export const stopTimeTracker = (timeTrackerId: string, payload: TimeTrackerStopRequest): Promise<AxiosResponse<void>> => {
+    return apiClient.post<void>(`/timetracker/${timeTrackerId}/stop`, payload);
 }
 
 export const getTimeTrackerByTaskId = ({ collaboratorId, page, pageSize }: GetTimeTrackerByTaskIdParams, taskId: string): Promise<AxiosResponse<GetTimeTrackerByTaskIdResponse>> => {

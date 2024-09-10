@@ -54,6 +54,20 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
             };
         }
 
+        public async Task UpdateAsync(TimeTracker timeTracker)
+        {
+             dbContext.Update(timeTracker);
+             await dbContext.SaveChangesAsync(); 
+        }
 
+        public async Task<TimeTracker> Get(Guid id)
+        {
+          return await dbContext.TimeTrackers
+                .Where(tt => tt.Id == id)
+                .Include(tt => tt.Task)
+                .ThenInclude(t => t.Project)
+                .Include(tt => tt.Collaborator)
+                .FirstOrDefaultAsync();   
+        }
     }
 }

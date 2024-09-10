@@ -4,6 +4,10 @@ export interface TimeTrackerInitRequest {
     taskId: string;
 }
 
+export interface TimeTrackerStopRequest {
+    endTime: string;
+}
+
 export interface TimeTracker {
     id: string;
     createdAt: string;

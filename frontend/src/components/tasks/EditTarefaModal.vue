@@ -67,7 +67,7 @@
               <div v-if="activeTab === 'track'">
                 <div class="mb-2">
                   <p>Tempo total da tarefa:</p>
-                  <p>{{ trackedTime }}</p>
+                  <p>{{ task?.totalTimeSpent }}</p>
                 </div>
                 <div>
                   <button class="btn btn-success me-2" @click="startTracking"

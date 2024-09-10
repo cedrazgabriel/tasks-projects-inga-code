@@ -99,7 +99,11 @@ namespace TaskManager.API.Controllers
                 ProjectId = task.ProjectId.ToString(),
                 CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
                 UpdatedAt = task.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss"),
-                ProjectName = task.Project.Name
+                ProjectName = task.Project.Name,
+                TotalTimeSpent = task.TimeTrackers
+                .Select(tracker => (tracker.EndDate ?? DateTime.Now) - tracker.StartDate) 
+                .Aggregate(TimeSpan.Zero, (total, current) => total + current) 
+                .ToString(@"hh\:mm\:ss") 
             };
 
             return Ok(response);

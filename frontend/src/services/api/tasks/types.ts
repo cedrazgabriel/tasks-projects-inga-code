@@ -7,6 +7,7 @@ export interface Task {
     updatedAt: string;
     projectId: string;
     projectName: string;
+    totalTimeSpent: string;
 }
 
 export interface GetTasksResponse {

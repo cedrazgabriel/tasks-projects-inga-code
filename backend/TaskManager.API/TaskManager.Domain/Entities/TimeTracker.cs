@@ -19,6 +19,13 @@ namespace TaskManager.Domain.Entities
             CollaboratorId = collaboratorId;
         }
 
+        public void SetEndDate(DateTime endDate)
+        {
+            EndDate = endDate.ToUniversalTime();
+            UpdatedAt = DateTime.UtcNow;
+        }
+
+
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string TimeZoneId { get; set; } = string.Empty;

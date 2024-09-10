@@ -21,7 +21,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="tracker in timeTrackers" :key="tracker.id">
+                <!-- Substituímos o timeTrackers por paginatedTimeTrackers -->
+                <tr v-for="tracker in paginatedTimeTrackers" :key="tracker.id">
                     <td>{{ tracker.collaboratorName }}</td>
                     <td>{{ formatDate(tracker.startDate) }}</td>
                     <td>{{ tracker.endDate ? formatDate(tracker.endDate) : 'Em andamento' }}</td>
@@ -78,39 +79,41 @@ export default defineComponent({
             emit('ongoing-tracker', newVal);
         });
 
-        const fetchTimeTrackers = async () => {
-            const response = await getTimeTrackerByTaskId({
-                page: page.value,
-                pageSize: pageSize.value,
-                collaboratorId: selectedCollaboratorId.value,
-            }, props.taskId);
+        const filteredTimeTrackers = computed(() => {
+            // Faz o filtro localmente, sem chamar a API
+            if (!selectedCollaboratorId.value) {
+                return timeTrackers.value; // Retorna todos se não houver filtro
+            }
+            return timeTrackers.value.filter(
+                tracker => tracker.collaboratorId === selectedCollaboratorId.value
+            );
+        });
 
-            timeTrackers.value = response.data.items;
-            totalPages.value = Math.ceil(response.data.totalRecords / pageSize.value);
-        };
-
-        const fetchCollaborators = async () => {
-            const response = await getCollaborators();
-            collaborators.value = response.data;
-        };
+        const paginatedTimeTrackers = computed(() => {
+            const startIndex = (page.value - 1) * pageSize.value;
+            const endIndex = startIndex + pageSize.value;
+            return filteredTimeTrackers.value.slice(startIndex, endIndex);
+        });
 
         const previousPage = () => {
             if (page.value > 1) {
                 page.value--;
-                fetchTimeTrackers();
             }
         };
 
         const nextPage = () => {
             if (page.value < totalPages.value) {
                 page.value++;
-                fetchTimeTrackers();
             }
         };
 
         const stopTracking = async (trackerId: string) => {
             try {
-                await stopTimeTracker(trackerId);
+                const request = {
+                    endTime: new Date().toISOString(),
+                };
+
+                await stopTimeTracker(trackerId, request);
                 toast.success('Rastreamento parado com sucesso.');
                 fetchTimeTrackers();
             } catch (error) {
@@ -125,10 +128,24 @@ export default defineComponent({
             return localDate.toLocaleString();
         };
 
+        const fetchTimeTrackers = async () => {
+            const response = await getTimeTrackerByTaskId(
+                {
+                    page: page.value,
+                    pageSize: pageSize.value,
+                    collaboratorId: selectedCollaboratorId.value,
+                },
+                props.taskId
+            );
 
-        watch(selectedCollaboratorId, () => {
-            fetchTimeTrackers();
-        });
+            timeTrackers.value = response.data.items;
+            totalPages.value = Math.ceil(timeTrackers.value.length / pageSize.value);
+        };
+
+        const fetchCollaborators = async () => {
+            const response = await getCollaborators();
+            collaborators.value = response.data;
+        };
 
         onMounted(() => {
             fetchTimeTrackers();
@@ -143,6 +160,7 @@ export default defineComponent({
             totalPages,
             previousPage,
             nextPage,
+            paginatedTimeTrackers,
             formatDate,
             stopTracking,
         };

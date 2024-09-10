@@ -58,6 +58,7 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
         {
             return await dbContext.Tasks
                 .Include(task => task.Project)
+                .Include(task => task.TimeTrackers)
                 .Where(task => task.Id == id)
                 .FirstOrDefaultAsync();
         }
