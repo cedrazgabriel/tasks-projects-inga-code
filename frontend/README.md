@@ -1,5 +1,34 @@
-# Vue 3 + TypeScript + Vite
+# Bem vindo ao projeto do front-end do desafio técnico
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## Tecnologias
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+ Esse projeto foi desenvolvido com as seguintes tecnologias:
+
+ - [Vite](https://vitejs.dev/) 
+ - [Vue JS](https://vuejs.org/)
+ - [Bootstrap](https://getbootstrap.com/)
+ - [Saas](https://sass-lang.com/)
+ - [Typescript](https://www.typescriptlang.org/)
+
+ ## Como rodar o projeto.
+ Para conseguir executar esse projeto em sua máquina, é necessário seguir os seguintes passos
+
+ 1 - Instalar as dependências
+
+ ```bash
+    npm install
+```
+
+ 2 - Rodar o projeto com o comando:
+
+ ```bash
+    npm run dev
+```
+
+ 3 - Se tudo ocorreu bem, o projeto deve estar rodando na porta http://localhost:5137
+
+
+
+
+## Dúvidas
+Se tiver alguma dúvida ou sugestão para esse projeto, basta entrar em contato comigo aqui no github, linked-in ou whatsapp.
