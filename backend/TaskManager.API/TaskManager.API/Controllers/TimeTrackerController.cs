@@ -40,7 +40,7 @@ namespace TaskManager.API.Controllers
                 return BadRequest("ID de usuário inválido.");
             }
 
-            var timeTracker = await useCase.Execute(userGuid,
+            var timeTracker = await useCase.a(userGuid,
                 request.TaskId,
                 Convert.ToDateTime(request.StartDateTime),
                 Convert.ToDateTime(request.EndDateTime),
@@ -58,6 +58,43 @@ namespace TaskManager.API.Controllers
             };
 
             return CreatedAtAction(nameof(Create), new { id = timeTracker.Id }, response);
+        }
+
+        [HttpGet("")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TaskResponse>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Retorna todas as tasks com a opção de filtrar os time trackers por projeto e colaborador.")]
+        public async Task<ActionResult<PaginatedResult<TaskResponse>>> GetTasks([FromQuery] Guid? projectId,
+            [FromQuery] Guid? collaboratorId,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
+
+        {
+           
+            var useCase = new GetTimeTrackersUseCase(timeTrackerRepository);
+
+            var tasks = await useCase.Execute(projectId, collaboratorId);
+
+            if (tasks == null || !tasks.Any())
+            {
+                return NotFound("Nenhuma task encontrada.");
+            }
+
+            var response = tasks.Select(task => new TaskResponse
+            {
+                TaskId = task.Id.ToString(),
+                TaskName = task.Name,
+                ProjectId = task.Project.Id.ToString(),
+                ProjectName = task.Project.Name,
+                Collaborators = task.TimeTrackers.Select(tt => new CollaboratorResponse
+                {
+                    CollaboratorId = tt.Collaborator.Id.ToString(),
+                    CollaboratorName = tt.Collaborator.Name
+                }).ToList()
+            });
+
+            return Ok(response);
         }
     }
 }

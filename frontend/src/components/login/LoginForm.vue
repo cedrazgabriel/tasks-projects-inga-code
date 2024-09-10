@@ -43,6 +43,7 @@
   import { useRouter } from 'vue-router';
   import { AuthService } from '../../services/auth';
   import { login } from '../../services/api/user/userService';
+  import { useToast } from 'vue-toastification';
   import './LoginForm.scss'; 
   
   export default defineComponent({
@@ -56,6 +57,7 @@
       });
       const apiError = ref('');
       const router = useRouter();
+      const toast = useToast();
   
       const validateForm = () => {
         errors.username = '';
@@ -79,11 +81,16 @@
               username: username.value,
               password: password.value,
             });
+
+            if (response.status === 401) {
+             toast.error("Credenciais inválidas.")
+              return;
+            }
+
             AuthService.login(response.data.token);
             router.push('/');
           } catch (error) {
-            apiError.value = 'Credenciais inválidas';
-            console.log(error);
+            toast.error(error)
           }
         }
       };
