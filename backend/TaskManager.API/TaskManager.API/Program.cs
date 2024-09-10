@@ -118,7 +118,6 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
-// Seeding após a criação do host
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -150,7 +149,6 @@ app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 app.MapControllers();
 app.Run();
 
-// Método para realizar o seed
 async Task SeedData(TaskManagerDbContext context, IHashGenerator hasher)
 {
     if (!context.Users.Any())
