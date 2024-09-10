@@ -51,7 +51,8 @@
           </li>
         </ul>
       </nav>
-      <EditTarefaModal v-if="showEditModal && selectedTask" :task-id="selectedTask.id" @close="closeEditModal" />
+      <EditTarefaModal v-if="showEditModal && selectedTask" :key="selectedTask.id" :task-id="selectedTask.id"
+        @close="closeEditModal" />
 
       <CreateTarefaModal v-if="showCreateModal" @close="closeCreateModal" @create="createTaskHandler" />
 

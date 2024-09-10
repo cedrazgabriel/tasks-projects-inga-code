@@ -70,11 +70,12 @@
                   <p>{{ trackedTime }}</p>
                 </div>
                 <div>
-                  <button class="btn btn-success me-2" @click="startTracking" :disabled="isTracking">Iniciar</button>
+                  <button class="btn btn-success me-2" @click="startTracking"
+                    :disabled="isTracking || hasOngoingTracker">Iniciar</button>
                 </div>
 
                 <div v-if="activeTab === 'track' && task">
-                  <TimeTrackersTable :taskId="task.id" />
+                  <TimeTrackersTable :taskId="task.id" @ongoing-tracker="onOngoingTracker" />
                 </div>
               </div>
             </div>
@@ -120,6 +121,12 @@ export default defineComponent({
     const trackedTime = ref('00:00:00');
     let interval: ReturnType<typeof setInterval> | null = null;
     let startTime = ref(0);
+    const hasOngoingTracker = ref(false);
+
+
+    const onOngoingTracker = (value: boolean) => {
+      hasOngoingTracker.value = value;
+    };
 
     const fetchProjects = async () => {
       try {
@@ -220,7 +227,9 @@ export default defineComponent({
       trackedTime,
       isTracking,
       startTracking,
-      stopTracking
+      stopTracking,
+      hasOngoingTracker,
+      onOngoingTracker,
     };
   },
 });

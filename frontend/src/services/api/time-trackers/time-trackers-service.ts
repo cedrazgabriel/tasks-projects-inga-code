@@ -12,6 +12,10 @@ export const initTimeTracker = (payload: TimeTrackerInitRequest): Promise<AxiosR
     return apiClient.post<void>(`/timetracker`, payload);
 }
 
+export const stopTimeTracker = (timeTrackerId: string): Promise<AxiosResponse<void>> => {
+    return apiClient.post<void>(`/timetracker/${timeTrackerId}/stop`);
+}
+
 export const getTimeTrackerByTaskId = ({ collaboratorId, page, pageSize }: GetTimeTrackerByTaskIdParams, taskId: string): Promise<AxiosResponse<GetTimeTrackerByTaskIdResponse>> => {
     return apiClient.get<GetTimeTrackerByTaskIdResponse>(`/timetracker/${taskId}`, {
         params: {

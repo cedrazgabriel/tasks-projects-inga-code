@@ -16,7 +16,6 @@
                     <th>Colaborador</th>
                     <th>Início</th>
                     <th>Fim</th>
-                    <th>Duração</th>
                     <th>Projeto</th>
                     <th>Ações</th>
                 </tr>
@@ -26,7 +25,6 @@
                     <td>{{ tracker.collaboratorName }}</td>
                     <td>{{ formatDate(tracker.startDate) }}</td>
                     <td>{{ tracker.endDate ? formatDate(tracker.endDate) : 'Em andamento' }}</td>
-                    <td>{{ calculateDuration(tracker.startDate, tracker.endDate) }}</td>
                     <td>{{ tracker.projectName }}</td>
                     <td>
                         <!-- Botão para parar o rastreamento, visível apenas se o rastreamento estiver em andamento -->
@@ -47,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, watch } from 'vue';
+import { defineComponent, ref, onMounted, watch, computed } from 'vue';
 import { getTimeTrackerByTaskId, stopTimeTracker } from '../../services/api/time-trackers/time-trackers-service';
 import { TimeTracker } from '../../services/api/time-trackers/types';
 import { Collaborator } from '../../services/api/collaborators/types';
@@ -62,7 +60,8 @@ export default defineComponent({
             required: true,
         },
     },
-    setup(props) {
+    emits: ['ongoing-tracker'],
+    setup(props, { emit }) {
         const timeTrackers = ref<TimeTracker[]>([]);
         const collaborators = ref<Collaborator[]>([]);
         const selectedCollaboratorId = ref('');
@@ -70,6 +69,14 @@ export default defineComponent({
         const pageSize = ref(10);
         const totalPages = ref(1);
         const toast = useToast();
+
+        const hasOngoingTracker = computed(() => {
+            return timeTrackers.value.some(tracker => !tracker.endDate);
+        });
+
+        watch(hasOngoingTracker, (newVal) => {
+            emit('ongoing-tracker', newVal);
+        });
 
         const fetchTimeTrackers = async () => {
             const response = await getTimeTrackerByTaskId({
@@ -105,7 +112,7 @@ export default defineComponent({
             try {
                 await stopTimeTracker(trackerId);
                 toast.success('Rastreamento parado com sucesso.');
-                fetchTimeTrackers(); // Atualizar a lista de rastreamentos
+                fetchTimeTrackers();
             } catch (error) {
                 toast.error('Erro ao parar o rastreamento.');
                 console.error('Erro ao parar o rastreamento:', error);
@@ -118,14 +125,6 @@ export default defineComponent({
             return localDate.toLocaleString();
         };
 
-        const calculateDuration = (startDate: string, endDate: string | null) => {
-            const start = new Date(startDate).getTime() - 3 * 60 * 60 * 1000; // Ajustar para UTC-3
-            const end = endDate ? new Date(endDate).getTime() - 3 * 60 * 60 * 1000 : Date.now() - 3 * 60 * 60 * 1000; // Ajustar para UTC-3
-            const duration = Math.floor((end - start) / 1000);
-            const hours = Math.floor(duration / 3600);
-            const minutes = Math.floor((duration % 3600) / 60);
-            return `${hours}h ${minutes}m`;
-        };
 
         watch(selectedCollaboratorId, () => {
             fetchTimeTrackers();
@@ -145,7 +144,6 @@ export default defineComponent({
             previousPage,
             nextPage,
             formatDate,
-            calculateDuration,
             stopTracking,
         };
     },
