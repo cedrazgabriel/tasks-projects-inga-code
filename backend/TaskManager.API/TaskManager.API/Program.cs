@@ -2,24 +2,24 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 using TaskManager.API.Middlewares;
+using TaskManager.API.Validators;
 using TaskManager.Application.Cryptograph.Contracts;
 using TaskManager.Application.Repositories.Contracts;
 using TaskManager.Application.Services;
+using TaskManager.Domain.Entities;
 using TaskManager.Infrastructure.Cryptograph;
-using TaskManager.Infrastructure.Persistence;
 using TaskManager.Infrastructure.Persistence.Repositories;
-using TaskManager.API.Validators;
-using Microsoft.OpenApi.Models;
+using TaskManager.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:SecretKey"]);
 
-if(key is null)
+if (key is null)
 {
     throw new ArgumentNullException(nameof(key));
 }
@@ -59,8 +59,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -71,14 +69,11 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IHashGenerator, HashGenerator>();
 builder.Services.AddScoped<IHashCompare, HashCompare>();
 
-
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICollaboratorRepository, CollaboratorRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<ITimeTrackerRepository, TimeTrackerRepository>();
-
-
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<UserRegisterRequestValidator>();
@@ -121,12 +116,27 @@ builder.Services.AddSwaggerGen(options =>
     options.EnableAnnotations();
 });
 
-
 var app = builder.Build();
+
+// Seeding após a criação do host
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<TaskManagerDbContext>();
+        var hasher = services.GetRequiredService<IHashGenerator>();
+
+        SeedData(context, hasher);  // Chama o seed para criar os usuários
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Ocorreu um erro ao realizar o seed no banco de dados: " + ex.Message);
+    }
+}
 
 app.UseCors("AllowAllOrigins");
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -134,10 +144,26 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 app.MapControllers();
-
 app.Run();
+
+// Método para realizar o seed
+async Task SeedData(TaskManagerDbContext context, IHashGenerator hasher)
+{
+    if (!context.Users.Any())
+    {
+        var hashedPassword = await hasher.HashAsync("senha123");
+        var users = new List<User>
+        {
+            new("user1", hashedPassword),
+            new("user2", hashedPassword),
+            new("user3", hashedPassword)
+        };
+
+        context.Users.AddRange(users);
+        context.SaveChanges();
+    }
+}

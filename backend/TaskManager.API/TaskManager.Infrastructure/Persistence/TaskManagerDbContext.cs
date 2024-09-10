@@ -26,5 +26,17 @@ namespace TaskManager.Infrastructure.Persistence
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
+
+        public void Seed()
+        {
+            if (!Users.Any())
+            {
+               var users = new List<User>();
+                users.Add(new User("admin", "admin"));
+
+                Users.AddRange(users);
+                SaveChanges();
+            }
+        }
     }
 }
