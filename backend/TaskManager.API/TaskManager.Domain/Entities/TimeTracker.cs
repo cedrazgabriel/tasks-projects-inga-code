@@ -10,10 +10,9 @@ namespace TaskManager.Domain.Entities
     {
         private TimeTracker() { }
 
-        public TimeTracker(DateTime startDate, DateTime endDate, string timeZoneId, Guid taskId, Guid collaboratorId)
+        public TimeTracker(DateTime startDate, string timeZoneId, Guid taskId, Guid collaboratorId)
         {
             StartDate = startDate.ToUniversalTime();
-            EndDate = endDate.ToUniversalTime();
             TimeZoneId = timeZoneId;
             CreatedAt = DateTime.UtcNow;
             TaskId = taskId;
@@ -21,11 +20,11 @@ namespace TaskManager.Domain.Entities
         }
 
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public string TimeZoneId { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public DateTime? DeletedAt { get; set; }
+        public DateTime? DeletedAt { get; set; } = null;
         public Guid TaskId { get; set; }
         public TaskProject Task { get; set; }
 

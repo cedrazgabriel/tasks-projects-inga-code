@@ -27,7 +27,7 @@
               <td>{{ tarefa.updatedAt ? formatDate(tarefa.updatedAt) : "" }}</td>
               <td>
                 <button>
-                  <PhPencil class="me-2" @click="openEditModal(tarefa)" size="24" color="#FFC107" />
+                  <PhDotsThreeVertical class="me-2" @click="openEditModal(tarefa)" size="24" color="black" />
                 </button>
                 <button>
                   <PhTrash class="me-2" @click="confirmDelete(tarefa)" size="24" color="#DC3545" />
@@ -51,12 +51,13 @@
           </li>
         </ul>
       </nav>
-      <EditTarefaModal v-if="showEditModal && selectedTask" :task-id="selectedTask.id"  @close="closeEditModal" />
- 
+      <EditTarefaModal v-if="showEditModal && selectedTask" :task-id="selectedTask.id" @close="closeEditModal" />
+
       <CreateTarefaModal v-if="showCreateModal" @close="closeCreateModal" @create="createTaskHandler" />
 
       <!-- Modal de confirmação de exclusão -->
-      <div v-if="showDeleteModal" class="modal fade show" style="display: block;" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div v-if="showDeleteModal" class="modal fade show" style="display: block;" tabindex="-1"
+        aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -64,7 +65,8 @@
               <button type="button" class="btn-close" @click="cancelDelete"></button>
             </div>
             <div class="modal-body">
-              <p>Tem certeza que deseja deletar a tarefa <strong>{{ taskToDelete?.name }}</strong>? Todo o tempo rastreado será perdido.</p>
+              <p>Tem certeza que deseja deletar a tarefa <strong>{{ taskToDelete?.name }}</strong>? Todo o tempo
+                rastreado será perdido.</p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click="cancelDelete">Não</button>
@@ -79,8 +81,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, computed } from 'vue';
-import {RingLoader} from 'vue3-spinner';
-import {PhPencil, PhTrash} from '@phosphor-icons/vue';
+import { RingLoader } from 'vue3-spinner';
+import { PhDotsThreeVertical, PhTrash } from '@phosphor-icons/vue';
 import { Task, UpdateTaskRequest } from '../../services/api/tasks/types';
 import { createTask, deleteTask, getTasks } from '../../services/api/tasks/tasksService';
 import CreateTarefaModal from './CreateTarefaModal.vue';
@@ -91,7 +93,7 @@ export default defineComponent({
   name: 'Tarefas',
   components: {
     RingLoader,
-    PhPencil,
+    PhDotsThreeVertical,
     PhTrash,
     CreateTarefaModal,
     EditTarefaModal
@@ -185,7 +187,7 @@ export default defineComponent({
 
     const createTaskHandler = async (data: UpdateTaskRequest) => {
       try {
-        isLoading.value = true; 
+        isLoading.value = true;
         await createTask(data);
         await fetchTasks(currentPage.value);
       } catch (error) {
@@ -251,7 +253,7 @@ export default defineComponent({
   min-width: 450px;
 }
 
-button{
+button {
   border: none;
 }
 </style>

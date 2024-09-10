@@ -9,6 +9,7 @@ namespace TaskManager.Application.Repositories.Contracts
 {
     public interface ICollaboratorRepository
     {
+        public Task<List<Collaborator>> GetAll();
         public Task CreateAsync(Collaborator collaborator);
         public Task<Collaborator> GetByUserIdAsync(Guid userId);
     }

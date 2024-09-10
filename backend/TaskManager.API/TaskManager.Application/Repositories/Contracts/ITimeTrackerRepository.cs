@@ -11,7 +11,7 @@ namespace TaskManager.Application.Repositories.Contracts
     public interface ITimeTrackerRepository
     {
         public Task<List<TimeTracker>> GetTimeTrackersByTaskIdAsync(Guid taskId);
-        public Task<PaginatedResult<TimeTracker>> GetTimeTrackersWithFiltersPaginatedAsync(Guid? projectId, Guid? collaboratorId, int page, int pageSize);
+        public Task<PaginatedResult<TimeTracker>> GetTimeTrackersWithFiltersPaginatedAsync(Guid taskId, int page, int pageSize);
         public Task CreateAsync(TimeTracker timeTracker);
     }
 }

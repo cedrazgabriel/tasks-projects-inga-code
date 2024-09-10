@@ -11,5 +11,7 @@
         public string TaskName { get; set; }
         public string TaskId { get; set; }
         public string UpdatedAt { get; set; }
+        public string ProjectId { get; set; }
+        public string ProjectName { get; set; }
     }
 }

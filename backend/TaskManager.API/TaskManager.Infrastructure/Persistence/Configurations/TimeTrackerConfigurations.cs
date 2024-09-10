@@ -18,8 +18,7 @@ namespace TaskManager.Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             builder.Property(tt => tt.EndDate)
-                .HasColumnName("end_date")
-                .IsRequired();
+                .HasColumnName("end_date");
 
             builder.Property(tt => tt.TimeZoneId)
                 .HasColumnName("time_zone_id")

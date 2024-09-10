@@ -27,7 +27,7 @@ namespace TaskManager.API.Controllers
         [SwaggerOperation(Summary = "Iniciar time tracker", Description = "Inicia um time tracker de uma task específica.")]
         public async Task<ActionResult<TimeTrackerResponse>> Create([FromBody] InitTimeTrackerRequest request)
         {
-            var useCase = new CreateTimeTrackerUseCase(taskRepository, timeTrackerRepository, collaboratorRepository);
+            var useCase = new InitTimeTrackerUseCase(taskRepository, timeTrackerRepository, collaboratorRepository);
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -44,7 +44,6 @@ namespace TaskManager.API.Controllers
             var timeTracker = await useCase.Execute(userGuid,
                 request.TaskId,
                 Convert.ToDateTime(request.StartDateTime),
-                Convert.ToDateTime(request.EndDateTime),
                 request.TimeZoneId);
 
             var response = new TimeTrackerResponse
@@ -52,7 +51,7 @@ namespace TaskManager.API.Controllers
                CollaboratorId = timeTracker.CollaboratorId.ToString(),
                CollaboratorName = timeTracker.Collaborator.Name,
                CreatedAt = timeTracker.CreatedAt.ToString("yyyy/MM/dd HH:mm:ss"),
-               EndDate = timeTracker.EndDate.ToString("yyyy/MM/dd HH:mm:ss"),
+               EndDate = null,
                Id = timeTracker.Id.ToString(),
                StartDate = timeTracker.StartDate.ToString("yyyy/MM/dd HH:mm:ss"),
                UpdatedAt = timeTracker.UpdatedAt?.ToString("yyyy/MM/dd HH:mm:ss")
@@ -61,22 +60,17 @@ namespace TaskManager.API.Controllers
             return CreatedAtAction(nameof(Create), new { id = timeTracker.Id }, response);
         }
 
-        [HttpGet("")]
+        [HttpGet("{taskId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TaskResponse>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Produces("application/json")]
-        [SwaggerOperation(Summary = "Retorna todas as tasks com a opção de filtrar os time trackers por projeto e colaborador.")]
-        public async Task<ActionResult<PaginatedResult<TimeTrackerResponse>>> GetTasks([FromQuery] Guid? projectId,
-            [FromQuery] Guid? collaboratorId,
-            [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 10)
-
+        [SwaggerOperation(Summary = "Retorna todas as tasks com a opção de filtrar os time trackers por tasks.")]
+        public async Task<ActionResult<PaginatedResult<TimeTrackerResponse>>> GetTimeTrackersByTaskId(Guid taskId, [FromQuery] int page = 1,[FromQuery] int pageSize = 10)
         {
-           
-            var useCase = new GetTimeTrackersUseCase(timeTrackerRepository);
 
-            var tasks = await useCase.Execute(projectId, collaboratorId, page, pageSize);
+            var useCase = new GetTimeTrackersByTaskIdUseCase(timeTrackerRepository);
 
+            var tasks = await useCase.Execute(taskId, page, pageSize);
 
             var response = new PaginatedResult<TimeTrackerResponse>()
             {
@@ -89,11 +83,13 @@ namespace TaskManager.API.Controllers
                     CreatedAt = tt.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
                     CollaboratorId = tt.CollaboratorId.ToString(),
                     CollaboratorName = tt.Collaborator.Name,
-                    EndDate = tt.EndDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                    EndDate = tt.EndDate?.ToString("yyyy-MM-dd HH:mm:ss"),
                     StartDate = tt.StartDate.ToString("yyyy-MM-dd HH:mm:ss"),
                     TaskId = tt.TaskId.ToString(),
                     TaskName = tt.Task.Name,
-                    UpdatedAt = tt.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss")
+                    UpdatedAt = tt.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss"),
+                    ProjectId = tt.Task.Project.Id.ToString(),
+                    ProjectName = tt.Task.Project.Name
                 }).ToList()
             };
                 
