@@ -13,7 +13,7 @@ namespace TaskManager.Application.UseCases.TimeTrackers
     {
         public async Task<PaginatedResult<TimeTracker>> Execute(Guid? projectId, Guid? collaboratorId, int page, int pageSize)
         {
-            var timeTrackers = await timeTrackerRepository.GetTasksWithFiltersAsync(projectId, collaboratorId);
+            var timeTrackers = await timeTrackerRepository.GetTimeTrackersWithFiltersPaginatedAsync(projectId, collaboratorId, page, pageSize);
 
             return timeTrackers;
         }

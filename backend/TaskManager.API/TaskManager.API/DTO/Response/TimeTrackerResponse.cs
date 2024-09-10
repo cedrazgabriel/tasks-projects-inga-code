@@ -8,6 +8,8 @@
         public string CollaboratorId { get; set; }
         public string CollaboratorName { get; set; }
         public string CreatedAt { get; set; }
+        public string TaskName { get; set; }
+        public string TaskId { get; set; }
         public string UpdatedAt { get; set; }
     }
 }

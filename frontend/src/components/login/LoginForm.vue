@@ -45,6 +45,7 @@
   import { login } from '../../services/api/user/userService';
   import { useToast } from 'vue-toastification';
   import './LoginForm.scss'; 
+import axios from 'axios';
   
   export default defineComponent({
     name: 'LoginForm',
@@ -75,25 +76,28 @@
       };
   
       const handleSubmit = async () => {
-        if (validateForm()) {
-          try {
-            const response = await login({
-              username: username.value,
-              password: password.value,
-            });
+      if (validateForm()) {
+        try {
+          const response = await login({
+            username: username.value,
+            password: password.value,
+          });
 
-            if (response.status === 401) {
-             toast.error("Credenciais inválidas.")
-              return;
+          AuthService.login(response.data.token);
+          router.push('/');
+        } catch (error) {        
+          if (axios.isAxiosError(error)) {
+            if (error.response?.status === 401) {
+              toast.error("Credenciais inválidas.");
+            } else {
+              toast.error("Ocorreu um erro ao fazer login. Tente novamente.");
             }
-
-            AuthService.login(response.data.token);
-            router.push('/');
-          } catch (error) {
-            toast.error(error)
+          } else {
+            toast.error("Erro desconhecido. Verifique sua conexão.");
           }
         }
-      };
+      }
+    };
   
       return {
         username,

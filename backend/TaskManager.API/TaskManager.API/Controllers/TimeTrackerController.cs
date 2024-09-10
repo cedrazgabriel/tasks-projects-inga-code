@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using TaskManager.API.DTO.Request;
 using TaskManager.API.DTO.Response;
 using TaskManager.Application.Repositories.Contracts;
@@ -40,7 +41,7 @@ namespace TaskManager.API.Controllers
                 return BadRequest("ID de usuário inválido.");
             }
 
-            var timeTracker = await useCase.a(userGuid,
+            var timeTracker = await useCase.Execute(userGuid,
                 request.TaskId,
                 Convert.ToDateTime(request.StartDateTime),
                 Convert.ToDateTime(request.EndDateTime),
@@ -65,7 +66,7 @@ namespace TaskManager.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Retorna todas as tasks com a opção de filtrar os time trackers por projeto e colaborador.")]
-        public async Task<ActionResult<PaginatedResult<TaskResponse>>> GetTasks([FromQuery] Guid? projectId,
+        public async Task<ActionResult<PaginatedResult<TimeTrackerResponse>>> GetTasks([FromQuery] Guid? projectId,
             [FromQuery] Guid? collaboratorId,
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10)
@@ -74,26 +75,29 @@ namespace TaskManager.API.Controllers
            
             var useCase = new GetTimeTrackersUseCase(timeTrackerRepository);
 
-            var tasks = await useCase.Execute(projectId, collaboratorId);
+            var tasks = await useCase.Execute(projectId, collaboratorId, page, pageSize);
 
-            if (tasks == null || !tasks.Any())
-            {
-                return NotFound("Nenhuma task encontrada.");
-            }
 
-            var response = tasks.Select(task => new TaskResponse
+            var response = new PaginatedResult<TimeTrackerResponse>()
             {
-                TaskId = task.Id.ToString(),
-                TaskName = task.Name,
-                ProjectId = task.Project.Id.ToString(),
-                ProjectName = task.Project.Name,
-                Collaborators = task.TimeTrackers.Select(tt => new CollaboratorResponse
+                Page = page,
+                PageSize = pageSize,
+                TotalRecords = tasks.TotalRecords,
+                Items = tasks.Items.Select(tt => new TimeTrackerResponse()
                 {
-                    CollaboratorId = tt.Collaborator.Id.ToString(),
-                    CollaboratorName = tt.Collaborator.Name
+                    Id = tt.Id.ToString(),
+                    CreatedAt = tt.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
+                    CollaboratorId = tt.CollaboratorId.ToString(),
+                    CollaboratorName = tt.Collaborator.Name,
+                    EndDate = tt.EndDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                    StartDate = tt.StartDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                    TaskId = tt.TaskId.ToString(),
+                    TaskName = tt.Task.Name,
+                    UpdatedAt = tt.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss")
                 }).ToList()
-            });
-
+            };
+                
+             
             return Ok(response);
         }
     }
