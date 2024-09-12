@@ -6,7 +6,7 @@ on:
       - master 
   pull_request:
     branches:
-      - master 
+      - master
 
 jobs:
   build:
@@ -22,6 +22,10 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.x' 
+
+    # Navega até a pasta do backend
+    - name: Navigate to backend
+      run: cd backend/TaskManager.API
 
     # Restaura as dependências
     - name: Restore dependencies
