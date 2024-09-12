@@ -8,6 +8,8 @@
  - [Entity Framework Core](https://learn.microsoft.com/pt-br/ef/core/)
  - [Fluent Validator](https://docs.fluentvalidation.net/en/latest/)
  - [Swagger](https://swagger.io/)
+ - [Redis](https://redis.io/docs/latest/)
+
 
  ## Como rodar o projeto.
  Para conseguir executar esse projeto em sua máquina, é necessário seguir os seguintes passos
