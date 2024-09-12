@@ -9,6 +9,8 @@
  - [Fluent Validator](https://docs.fluentvalidation.net/en/latest/)
  - [Swagger](https://swagger.io/)
  - [Redis](https://redis.io/docs/latest/)
+ - [xUnit](https://xunit.net/)
+ - [Moq](https://github.com/devlooped/moq)
 
 
  ## Como rodar o projeto.
@@ -32,6 +34,12 @@
  - user1
  - user2
  - user3
+
+ 
+ 4 - Se desejar rodar os testes unitários do projeto, na pasta da solution digite no terminal:
+ ```bash
+    dotnet test
+```
 
 
 ## Dúvidas
