@@ -1,17 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using TaskManager.API.DTO.Request;
 using TaskManager.API.DTO.Response;
 using TaskManager.Application.Repositories.Contracts;
 using TaskManager.Application.UseCases.Tasks;
 using TaskManager.Application.UseCases.TimeTrackers;
-using TaskManager.Domain.Entities;
-using TaskManager.Infrastructure.Persistence.Repositories;
 
 namespace TaskManager.API.Controllers
 {
@@ -19,7 +15,10 @@ namespace TaskManager.API.Controllers
     [ApiController]
     [Authorize]
     [SwaggerTag("Gerencia os tempos relacionados a uma task da aplicação")]
-    public class TimeTrackerController(ITaskRepository taskRepository, ITimeTrackerRepository timeTrackerRepository, ICollaboratorRepository collaboratorRepository) : ControllerBase
+    public class TimeTrackerController(ITaskRepository taskRepository,
+        ITimeTrackerRepository timeTrackerRepository,
+        ICollaboratorRepository collaboratorRepository,
+        IMapper mapper) : ControllerBase
     {
         [HttpPost()]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TaskResponse))]
@@ -47,16 +46,7 @@ namespace TaskManager.API.Controllers
                 request.TaskId,
                 request.TimeZoneId);
 
-            var response = new TimeTrackerResponse
-            {
-               CollaboratorId = timeTracker.CollaboratorId.ToString(),
-               CollaboratorName = timeTracker.Collaborator.Name,
-               CreatedAt = timeTracker.CreatedAt.ToString("yyyy/MM/dd HH:mm:ss"),
-               EndDate = null,
-               Id = timeTracker.Id.ToString(),
-               StartDate = timeTracker.StartDate.ToString("yyyy/MM/dd HH:mm:ss"),
-               UpdatedAt = timeTracker.UpdatedAt?.ToString("yyyy/MM/dd HH:mm:ss")
-            };
+            var response = mapper.Map<TimeTrackerResponse>(timeTracker);
 
             return CreatedAtAction(nameof(Create), new { id = timeTracker.Id }, response);
         }
@@ -74,16 +64,7 @@ namespace TaskManager.API.Controllers
 
             var timeTracker = await useCase.Execute(timeTrackerId);
 
-            var response = new TimeTrackerResponse
-            {
-                CollaboratorId = timeTracker.CollaboratorId.ToString(),
-                CollaboratorName = timeTracker.Collaborator.Name,
-                CreatedAt = timeTracker.CreatedAt.ToString("yyyy/MM/dd HH:mm:ss"),
-                EndDate = null,
-                Id = timeTracker.Id.ToString(),
-                StartDate = timeTracker.StartDate.ToString("yyyy/MM/dd HH:mm:ss"),
-                UpdatedAt = timeTracker.UpdatedAt?.ToString("yyyy/MM/dd HH:mm:ss")
-            };
+            var response = mapper.Map<TimeTrackerResponse>(timeTracker);
 
             return response;
         }
@@ -100,28 +81,14 @@ namespace TaskManager.API.Controllers
 
             var tasks = await useCase.Execute(taskId, page, pageSize, collaboratorId);
 
-            var response = new PaginatedResult<TimeTrackerResponse>()
+            var response = new PaginatedResult<TimeTrackerResponse>
             {
                 Page = page,
                 PageSize = pageSize,
                 TotalRecords = tasks.TotalRecords,
-                Items = tasks.Items.Select(tt => new TimeTrackerResponse()
-                {
-                    Id = tt.Id.ToString(),
-                    CreatedAt = tt.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
-                    CollaboratorId = tt.CollaboratorId.ToString(),
-                    CollaboratorName = tt.Collaborator.Name,
-                    EndDate = tt.EndDate?.ToString("yyyy-MM-dd HH:mm:ss"),
-                    StartDate = tt.StartDate.ToString("yyyy-MM-dd HH:mm:ss"),
-                    TaskId = tt.TaskId.ToString(),
-                    TaskName = tt.Task.Name,
-                    UpdatedAt = tt.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss"),
-                    ProjectId = tt.Task.Project.Id.ToString(),
-                    ProjectName = tt.Task.Project.Name
-                }).ToList()
+                Items = mapper.Map<List<TimeTrackerResponse>>(tasks.Items)
             };
-                
-             
+
             return Ok(response);
         }
 
@@ -150,12 +117,7 @@ namespace TaskManager.API.Controllers
 
             var metrics = await useCase.Execute(userGuid);
           
-            var response =  new MetricsResponse
-            {
-                TotalHoursSpentToday = metrics.TotalHoursSpentToday,
-                TotalHoursSpentThisWeek = metrics.TotalHoursSpentThisWeek,
-                TotalHoursSpentThisMonth = metrics.TotalHoursSpentThisMonth
-            };
+            var response = mapper.Map<MetricsResponse>(metrics);
 
             return Ok(response);
         }

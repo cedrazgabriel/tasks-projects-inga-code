@@ -8,6 +8,7 @@ using TaskManager.Application.Services;
 using TaskManager.Application.UseCases.Projects;
 using Microsoft.AspNetCore.Authorization;
 using System.Reflection.Metadata.Ecma335;
+using AutoMapper;
 
 namespace TaskManager.API.Controllers
 {
@@ -15,7 +16,7 @@ namespace TaskManager.API.Controllers
     [ApiController]
     [Authorize]
     [SwaggerTag("Gerencia os projetos da aplicação")] 
-    public class ProjectController(IProjectRepository projectRepository, ICacheService cacheService) : ControllerBase
+    public class ProjectController(IProjectRepository projectRepository, ICacheService cacheService, IMapper mapper) : ControllerBase
     {
 
         [HttpGet]
@@ -33,13 +34,7 @@ namespace TaskManager.API.Controllers
                 Page = page,
                 PageSize = pageSize,
                 TotalRecords = projects.TotalRecords,
-                Items = projects.Items.Select(project => new ProjectResponse
-                {
-                    Id = project.Id.ToString(),
-                    Name = project.Name,
-                    CreatedAt = project.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
-                    UpdatedAt = project.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss")
-                }).ToList()
+                Items = mapper.Map<List<ProjectResponse>>(projects.Items)
             };
 
             return Ok(response);
@@ -61,13 +56,7 @@ namespace TaskManager.API.Controllers
                 return NotFound();
             }
 
-            var response = new ProjectResponse
-            {
-                Id = project.Id.ToString(),
-                Name = project.Name,
-                CreatedAt = project.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
-                 UpdatedAt = project.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss")
-            };
+            var response = mapper.Map<ProjectResponse>(project);
 
             return Ok(response);
         }
@@ -85,12 +74,7 @@ namespace TaskManager.API.Controllers
 
             var project = await useCase.Execute(request.Name);
 
-            var response = new CreateProjectResponse
-            {
-                Id = project.Id.ToString(),
-                Name= project.Name,
-                CreatedAt = project.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
-            };
+            var response = mapper.Map<CreateProjectResponse>(project);
 
             return CreatedAtAction(nameof(CreateProject), new { id = project.Id }, response);
         }
@@ -118,13 +102,7 @@ namespace TaskManager.API.Controllers
                 return NotFound();
             }
 
-            var response = new ProjectResponse
-            {
-                Id = project.Id.ToString(),
-                Name = project.Name,
-                CreatedAt = project.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
-                UpdatedAt = project.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss") 
-            };
+            var response = mapper.Map<ProjectResponse>(project);
 
             return Ok(response);
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -12,7 +13,7 @@ namespace TaskManager.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class CollaboratorController(ICollaboratorRepository collaboratorRepository) : ControllerBase
+public class CollaboratorController(ICollaboratorRepository collaboratorRepository, IMapper mapper) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CollaboratorResponse))]
@@ -24,10 +25,7 @@ public class CollaboratorController(ICollaboratorRepository collaboratorReposito
 
         var collaborators = await useCase.Execute();
 
-        var response = collaborators.Select(c => new CollaboratorResponse { 
-            Id = c.Id.ToString(),
-            Name = c.Name,
-        }).ToList();
+        var response = mapper.Map<CollaboratorResponse>(collaborators);
 
         return Ok(response);
     }

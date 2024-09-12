@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -17,7 +18,7 @@ namespace TaskManager.API.Controllers
     [ApiController]
     [Authorize]
     [SwaggerTag("Gerencia as tasks da aplicação")]
-    public class TaskController(ITaskRepository taskRepository, IProjectRepository projectRepository) : ControllerBase
+    public class TaskController(ITaskRepository taskRepository, IProjectRepository projectRepository, IMapper mapper) : ControllerBase
     {
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaginatedResult<TaskResponse>))]
@@ -34,16 +35,7 @@ namespace TaskManager.API.Controllers
                 Page = page,
                 PageSize = pageSize,
                 TotalRecords = tasks.TotalRecords,
-                Items = tasks.Items.Select(task => new TaskResponse
-                {
-                    Id = task.Id.ToString(),
-                    Name = task.Name,
-                    Description = task.Description,
-                    ProjectId = task.ProjectId.ToString(),
-                    CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
-                    UpdatedAt = task.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss"),
-                    ProjectName =  task.Project.Name,
-                }).ToList()
+                Items = mapper.Map<List<TaskResponse>>(tasks.Items)
             };
 
             return Ok(response);
@@ -65,16 +57,7 @@ namespace TaskManager.API.Controllers
                 Page = page,
                 PageSize = pageSize,
                 TotalRecords = tasks.TotalRecords,
-                Items = tasks.Items.Select(task => new TaskResponse
-                {
-                    Id = task.Id.ToString(),
-                    Name = task.Name,
-                    Description = task.Description,
-                    ProjectId = task.ProjectId.ToString(),
-                    CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
-                    UpdatedAt = task.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss"),
-                    ProjectName = task.Project.Name
-                }).ToList()
+                Items = mapper.Map<List<TaskResponse>>(tasks.Items)
             };
 
             return Ok(response);
@@ -91,20 +74,7 @@ namespace TaskManager.API.Controllers
 
             var task = await useCase.Execute(id);
 
-            var response = new TaskResponse
-            {
-                Id = task.Id.ToString(),
-                Name = task.Name,
-                Description = task.Description,
-                ProjectId = task.ProjectId.ToString(),
-                CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
-                UpdatedAt = task.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss"),
-                ProjectName = task.Project.Name,
-                TotalTimeSpent = task.TimeTrackers
-                .Select(tracker => (tracker.EndDate ?? DateTime.Now) - tracker.StartDate) 
-                .Aggregate(TimeSpan.Zero, (total, current) => total + current) 
-                .ToString(@"hh\:mm\:ss") 
-            };
+            var response = mapper.Map<TaskResponse>(task);
 
             return Ok(response);
         }
@@ -120,15 +90,7 @@ namespace TaskManager.API.Controllers
 
             var task = await useCase.Execute(request.Name, request.Description, request.ProjectId);
 
-            var response = new TaskResponse
-            {
-                Id = task.Id.ToString(),
-                Name = task.Name,
-                Description = task.Description,
-                ProjectId = task.ProjectId.ToString(),
-                CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
-                ProjectName = task.Project.Name
-            };
+            var response = mapper.Map<TaskResponse>(task);
 
             return CreatedAtAction(nameof(CreateTask), new { id = task.Id }, response);
         }
@@ -151,16 +113,7 @@ namespace TaskManager.API.Controllers
 
             var task = await useCase.Execute(id, request.Name, request.Description, request.ProjectId);
 
-            var response = new TaskResponse
-            {
-                Id = task.Id.ToString(),
-                Name = task.Name,
-                Description = task.Description,
-                ProjectId = task.ProjectId.ToString(),
-                CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
-                UpdatedAt = task.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss"),
-                ProjectName = task.Project.Name
-            };
+            var response = mapper.Map<TaskResponse>(task);
 
             return Ok(response);
         }

@@ -97,6 +97,9 @@ builder.Services.AddScoped<ITimeTrackerRepository, TimeTrackerRepository>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<UserRegisterRequestValidator>();
 
+//AutoMapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 //Swagger
 builder.Services.AddSwaggerGen(options =>
 {
