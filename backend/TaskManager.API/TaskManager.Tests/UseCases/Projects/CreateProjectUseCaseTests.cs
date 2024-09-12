@@ -26,7 +26,6 @@ namespace TaskManager.Tests.UseCases.Projects
             var createdProject = await useCase.Execute(projectName);
 
             // Assert
-           
             Assert.Equal(inMemoryProjectRepository.projects?.Count() , 1); 
             Assert.Equal(projectName, createdProject.Name); 
 
