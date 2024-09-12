@@ -16,6 +16,7 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
             var totalRecords = await dbContext.Tasks.AsNoTracking().CountAsync(); 
             var tasks = await dbContext.Tasks
                 .AsNoTracking()
+                .Where(task => task.DeletedAt == null)
                 .Include(task => task.Project)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -34,7 +35,7 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
         {
             var totalRecords = await dbContext.Tasks
                 .AsNoTracking() 
-                .Where(task => task.ProjectId == projectId)
+                .Where(task => task.ProjectId == projectId && task.DeletedAt == null)
                 .CountAsync();
 
             var tasks = await dbContext.Tasks
@@ -59,7 +60,7 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
             return await dbContext.Tasks
                 .Include(task => task.Project)
                 .Include(task => task.TimeTrackers)
-                .Where(task => task.Id == id)
+                .Where(task => task.Id == id && task.DeletedAt == null)
                 .FirstOrDefaultAsync();
         }
 
