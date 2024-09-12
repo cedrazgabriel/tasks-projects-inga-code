@@ -13,7 +13,6 @@ namespace TaskManager.Application.UseCases.Users
 {
     public class CreateUserUseCase(IUserRepository usersRepository, ICollaboratorRepository collaboratorRepository, IHashGenerator hashGenerator, IAuthService authService)
     {
-
         public async Task<string> Execute(string username, string password)
         {
             var userWithSameUsername = await usersRepository.FindByUserNameAsync(username);
