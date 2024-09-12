@@ -23,12 +23,13 @@
 
  ```bash
     dotnet ef migrations add AddBancoDeDados --project TaskManager.Infrastructure --startup-project TaskManager.API
-    dotnet ef update database
+    dotnet ef database update --project TaskManager.Infrastructure --startup-project TaskManager.API
 ```
 
  3 - Após isso, na primeira execução do projeto, ele vai criar três usuários com a mesma senha (senha123), segue os logins dos usuários:
-
-
+ - user1
+ - user2
+ - user3
 
 
 ## Dúvidas
