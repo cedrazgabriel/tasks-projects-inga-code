@@ -37,7 +37,7 @@ namespace TaskManager.Application.Services
                 issuer: configuration["Jwt:Issuer"],   
                 audience: configuration["Jwt:Audience"], 
                 claims: claims,
-                expires: DateTime.Now.AddHours(1),      
+                expires: DateTime.Now.AddHours(12),      
                 signingCredentials: credentials);
 
             // Gera o token em formato string
