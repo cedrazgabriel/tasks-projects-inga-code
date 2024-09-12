@@ -75,5 +75,10 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
                 .Include(tt => tt.Collaborator)
                 .FirstOrDefaultAsync();   
         }
+
+        public async Task<List<TimeTracker>> GetByCollaboratorIdAsync(Guid collaboratorId)
+        {
+            return await dbContext.TimeTrackers.Where(tt => tt.CollaboratorId == collaboratorId).ToListAsync();
+        }
     }
 }

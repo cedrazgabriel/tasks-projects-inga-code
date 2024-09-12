@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import apiClient from "../../apiClient";
-import { GetTimeTrackerByTaskIdResponse, TimeTrackerInitRequest, TimeTrackerStopRequest } from "./types";
+import { GetTimeTrackerByTaskIdResponse, MetricsResponse, TimeTrackerInitRequest, TimeTrackerStopRequest } from "./types";
+
 
 export interface GetTimeTrackerByTaskIdParams {
     page: number;
@@ -25,3 +26,7 @@ export const getTimeTrackerByTaskId = ({ collaboratorId, page, pageSize }: GetTi
         }
     });
 };
+
+export const getMetrics = (): Promise<AxiosResponse<MetricsResponse>> => {
+    return apiClient.get<MetricsResponse>('/timetracker/metrics');
+}

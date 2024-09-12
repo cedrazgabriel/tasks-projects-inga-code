@@ -14,6 +14,8 @@ using TaskManager.Domain.Entities;
 using TaskManager.Infrastructure.Cryptograph;
 using TaskManager.Infrastructure.Persistence.Repositories;
 using TaskManager.Infrastructure.Persistence;
+using StackExchange.Redis;
+using TaskManager.Infrastructure.Cache;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,22 +64,40 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Banco de dados
 builder.Services.AddDbContext<TaskManagerDbContext>(options =>
        options.UseNpgsql(builder.Configuration.GetConnectionString("DbConnection")));
 
+
+//Redis
+var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+{
+    var configuration = ConfigurationOptions.Parse(redisConnectionString, true);
+    return ConnectionMultiplexer.Connect(configuration);
+});
+
+
+//Serviços
+builder.Services.AddScoped<ICacheService, RedisService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IHashGenerator, HashGenerator>();
 builder.Services.AddScoped<IHashCompare, HashCompare>();
 
+//Repositórios
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICollaboratorRepository, CollaboratorRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<ITimeTrackerRepository, TimeTrackerRepository>();
 
+
+//Fluent Validation
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<UserRegisterRequestValidator>();
 
+//Swagger
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo

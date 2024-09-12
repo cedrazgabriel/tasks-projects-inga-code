@@ -15,7 +15,7 @@ namespace TaskManager.API.Controllers
     [ApiController]
     [Authorize]
     [SwaggerTag("Gerencia os projetos da aplicação")] 
-    public class ProjectController(IProjectRepository projectRepository) : ControllerBase
+    public class ProjectController(IProjectRepository projectRepository, ICacheService cacheService) : ControllerBase
     {
 
         [HttpGet]
@@ -24,7 +24,7 @@ namespace TaskManager.API.Controllers
         [SwaggerOperation(Summary = "Consultar projetos", Description = "Este endpoint é usado para consultar todos os projetos da plataforma.")]
         public async Task<ActionResult<PaginatedResult<ProjectResponse>>> GetProjects([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var useCase = new GetProjectsUseCase(projectRepository);
+            var useCase = new GetProjectsUseCase(projectRepository, cacheService);
 
             var projects = await useCase.Execute(page, pageSize);
 
@@ -81,7 +81,7 @@ namespace TaskManager.API.Controllers
         [SwaggerOperation(Summary = "Registra um novo projeto", Description = "Este endpoint é usado para registrar um novo projeto na plataforma.")]
         public async Task<ActionResult<CreateProjectResponse>> CreateProject([FromBody] CreateProjectRequest request)
         {
-            var useCase = new CreateProjectUseCase(projectRepository);
+            var useCase = new CreateProjectUseCase(projectRepository, cacheService);
 
             var project = await useCase.Execute(request.Name);
 
@@ -109,7 +109,7 @@ namespace TaskManager.API.Controllers
                 return BadRequest("The ID provided is not valid.");
             }
 
-            var useCase = new UpdateProjectUseCase(projectRepository);
+            var useCase = new UpdateProjectUseCase(projectRepository, cacheService);
 
             var project = await useCase.Execute(projectId, request.Name);
 
@@ -141,7 +141,7 @@ namespace TaskManager.API.Controllers
                 return BadRequest("The ID provided is not valid.");
             }
 
-            var useCase = new DeleteProjectUseCase(projectRepository);
+            var useCase = new DeleteProjectUseCase(projectRepository, cacheService);
 
             var projectDeleted = await useCase.Execute(projectId);
 

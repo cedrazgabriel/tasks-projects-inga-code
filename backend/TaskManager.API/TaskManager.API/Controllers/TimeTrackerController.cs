@@ -10,6 +10,7 @@ using TaskManager.API.DTO.Response;
 using TaskManager.Application.Repositories.Contracts;
 using TaskManager.Application.UseCases.Tasks;
 using TaskManager.Application.UseCases.TimeTrackers;
+using TaskManager.Domain.Entities;
 using TaskManager.Infrastructure.Persistence.Repositories;
 
 namespace TaskManager.API.Controllers
@@ -121,6 +122,41 @@ namespace TaskManager.API.Controllers
             };
                 
              
+            return Ok(response);
+        }
+
+        [HttpGet("metrics")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TaskResponse>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Retorna o total de horas gastas do usuário no mês, semana e dia.")]
+        public async Task<ActionResult<MetricsResponse>> GetMetrics()
+        {
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("Usuário não autenticado.");
+            }
+
+            if (!Guid.TryParse(userId, out Guid userGuid))
+            {
+                return BadRequest("ID de usuário inválido.");
+            }
+
+
+            var useCase = new GetMetricsUseCase(timeTrackerRepository, collaboratorRepository);
+
+            var metrics = await useCase.Execute(userGuid);
+          
+            var response =  new MetricsResponse
+            {
+                TotalHoursSpentToday = metrics.TotalHoursSpentToday,
+                TotalHoursSpentThisWeek = metrics.TotalHoursSpentThisWeek,
+                TotalHoursSpentThisMonth = metrics.TotalHoursSpentThisMonth
+            };
+
             return Ok(response);
         }
     }

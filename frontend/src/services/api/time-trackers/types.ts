@@ -26,3 +26,9 @@ export interface GetTimeTrackerByTaskIdResponse {
     totalRecords: number;
     items: TimeTracker[];
 }
+
+export interface MetricsResponse {
+    totalHoursSpentThisMonth: string;
+    totalHoursSpentToday: string;
+    totalHoursSpentThisWeek: string;
+}
