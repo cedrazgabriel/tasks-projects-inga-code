@@ -32,6 +32,7 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
                 .Include(tt => tt.Task)
                 .ThenInclude(t => t.Project)
                 .Include(tt => tt.Collaborator)
+                .OrderByDescending(tt => tt.CreatedAt)
                 .AsQueryable();
 
            
