@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-    <div class="row">
+    <div class="row g-3">
       <!-- Card para Tempo Gasto Hoje -->
       <div class="col-md-4">
         <div class="card text-center">
@@ -39,6 +39,7 @@
     </div>
   </div>
 </template>
+
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';

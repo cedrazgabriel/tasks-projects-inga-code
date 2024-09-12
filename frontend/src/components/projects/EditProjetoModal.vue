@@ -80,6 +80,11 @@ export default defineComponent({
     };
 
     const formatDate = (dateString: string) => {
+
+      if (dateString === null) {
+        return '';
+      }
+      
       const date = new Date(dateString);
       return date.toLocaleDateString();
     };
