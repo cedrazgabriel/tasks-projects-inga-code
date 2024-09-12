@@ -25,7 +25,7 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<PaginatedResult<TimeTracker>> GetTimeTrackersWithFiltersPaginatedAsync(Guid taskId, int page, int pageSize)
+        public async Task<PaginatedResult<TimeTracker>> GetTimeTrackersWithFiltersPaginatedAsync(Guid taskId, int page, int pageSize, Guid? collaboratorId = null)
         {
             var query = dbContext.TimeTrackers
                 .Where(tt => tt.TaskId == taskId && tt.DeletedAt == null)
@@ -34,23 +34,28 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
                 .Include(tt => tt.Collaborator)
                 .AsQueryable();
 
+           
+            if (collaboratorId.HasValue)
+            {
+                query = query.Where(tt => tt.CollaboratorId == collaboratorId.Value);
+            }
+
           
- 
             var totalRecords = await query.CountAsync();
 
-           
+          
             var paginatedItems = await query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-          
+           
             return new PaginatedResult<TimeTracker>
             {
                 Page = page,
                 PageSize = pageSize,
                 TotalRecords = totalRecords,
-                Items = paginatedItems 
+                Items = paginatedItems
             };
         }
 

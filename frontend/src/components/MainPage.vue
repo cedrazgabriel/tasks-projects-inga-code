@@ -34,38 +34,42 @@
       </div>
     </nav>
 
-    <div class="container my-4">
+    <!-- Estilo aplicado à div que contém o router-view -->
+    <div class="container router-view-container my-4">
       <router-view />
     </div>
   </div>
 </template>
-  
-  <script lang="ts">
-  import { defineComponent } from 'vue';
+
+<script lang="ts">
+import { defineComponent } from 'vue';
 import { AuthService } from '../services/auth';
-import {PhSignOut} from '@phosphor-icons/vue'
-  
-  export default defineComponent({
-    name: 'MainPage',
-    components: {
-      SignOut: PhSignOut
-    },
-    methods: {
-      logout(){
-        AuthService.logout();
-        this.$router.push('/login');
-      }
+import { PhSignOut } from '@phosphor-icons/vue';
+
+export default defineComponent({
+  name: 'MainPage',
+  components: {
+    SignOut: PhSignOut
+  },
+  methods: {
+    logout() {
+      AuthService.logout();
+      this.$router.push('/login');
     }
-  });
-  </script>
-  
-  <style scoped>
-  
-  .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 70vh; 
   }
-  </style>
-  
+});
+</script>
+
+<style scoped>
+/* Estilo para aumentar o router-view */
+.router-view-container {
+  min-height: 80vh;  /* Altura mínima para o conteúdo */
+}
+
+/* Centraliza o conteúdo da página */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

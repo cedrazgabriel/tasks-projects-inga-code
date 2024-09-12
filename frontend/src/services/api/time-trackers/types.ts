@@ -1,5 +1,4 @@
 export interface TimeTrackerInitRequest {
-    startDateTime: string;
     timeZoneId: string;
     taskId: string;
 }

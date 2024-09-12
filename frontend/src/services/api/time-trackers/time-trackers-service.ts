@@ -5,7 +5,7 @@ import { GetTimeTrackerByTaskIdResponse, TimeTrackerInitRequest, TimeTrackerStop
 export interface GetTimeTrackerByTaskIdParams {
     page: number;
     pageSize: number;
-    collaboratorId: string;
+    collaboratorId: string | undefined;
 }
 
 export const initTimeTracker = (payload: TimeTrackerInitRequest): Promise<AxiosResponse<void>> => {

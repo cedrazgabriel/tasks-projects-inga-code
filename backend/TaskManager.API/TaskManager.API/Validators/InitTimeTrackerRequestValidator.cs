@@ -7,8 +7,6 @@ public class InitTimeTrackerRequestValidator : AbstractValidator<InitTimeTracker
 {
     public InitTimeTrackerRequestValidator()
     {
-        RuleFor(x => x.StartDateTime)
-            .NotEmpty().WithMessage("A data de início é obrigaório");
            
         RuleFor(x => x.TimeZoneId)
             .NotEmpty().WithMessage("O time zone id é obrigatório.");

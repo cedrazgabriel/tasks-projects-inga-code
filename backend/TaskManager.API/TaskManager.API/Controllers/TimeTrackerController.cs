@@ -44,7 +44,6 @@ namespace TaskManager.API.Controllers
 
             var timeTracker = await useCase.Execute(userGuid,
                 request.TaskId,
-                Convert.ToDateTime(request.StartDateTime),
                 request.TimeZoneId);
 
             var response = new TimeTrackerResponse
@@ -93,12 +92,12 @@ namespace TaskManager.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Retorna todas as tasks com a opção de filtrar os time trackers por tasks.")]
-        public async Task<ActionResult<PaginatedResult<TimeTrackerResponse>>> GetTimeTrackersByTaskId(Guid taskId, [FromQuery] int page = 1,[FromQuery] int pageSize = 10)
+        public async Task<ActionResult<PaginatedResult<TimeTrackerResponse>>> GetTimeTrackersByTaskId(Guid taskId, [FromQuery] Guid? collaboratorId, [FromQuery] int page = 1,[FromQuery] int pageSize = 10)
         {
 
             var useCase = new GetTimeTrackersByTaskIdUseCase(timeTrackerRepository);
 
-            var tasks = await useCase.Execute(taskId, page, pageSize);
+            var tasks = await useCase.Execute(taskId, page, pageSize, collaboratorId);
 
             var response = new PaginatedResult<TimeTrackerResponse>()
             {

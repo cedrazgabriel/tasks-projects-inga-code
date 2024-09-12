@@ -69,13 +69,8 @@
                   <p>Tempo total da tarefa:</p>
                   <p>{{ task?.totalTimeSpent }}</p>
                 </div>
-                <div>
-                  <button class="btn btn-success me-2" @click="startTracking"
-                    :disabled="isTracking || hasOngoingTracker">Iniciar</button>
-                </div>
-
                 <div v-if="activeTab === 'track' && task">
-                  <TimeTrackersTable :taskId="task.id" @ongoing-tracker="onOngoingTracker" />
+                  <TimeTrackersTable :taskId="task.id" :onTimeTrackerStoped="fetchTask"/>
                 </div>
               </div>
             </div>
@@ -95,7 +90,6 @@ import { Task } from '../../services/api/tasks/types';
 import { Project } from '../../services/api/projects/types';
 import { getProjects } from '../../services/api/projects/projectService';
 import { useToast } from 'vue-toastification';
-import { initTimeTracker } from '../../services/api/time-trackers/time-trackers-service';
 import TimeTrackersTable from './TimeTrackersTable.vue';
 
 export default defineComponent({
@@ -107,7 +101,7 @@ export default defineComponent({
     taskId: {
       type: String,
       required: true,
-    },
+    }
   },
   setup(props, { emit }) {
     const task = ref<Task | null>(null);
@@ -117,10 +111,8 @@ export default defineComponent({
     const toast = useToast();
 
     const activeTab = ref('edit');
-    const isTracking = ref(false);
+    
     const trackedTime = ref('00:00:00');
-    let interval: ReturnType<typeof setInterval> | null = null;
-    let startTime = ref(0);
     const hasOngoingTracker = ref(false);
 
 
@@ -171,46 +163,9 @@ export default defineComponent({
       return date.toLocaleDateString();
     };
 
-    const startTracking = async () => {
-      isTracking.value = true;
-      startTime.value = Date.now();
+    
 
-
-      try {
-        const timeZoneId = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const payload = {
-          startDateTime: new Date(startTime.value).toISOString(),
-          endDate: null,
-          timeZoneId,
-          taskId: task.value?.id || ''
-        };
-
-        await initTimeTracker(payload);
-
-        toast.success('Tempo rastreado iniciado com sucesso');
-      } catch (error) {
-        console.error('Erro ao iniciar o rastreamento de tempo:', error);
-        toast.error('Erro ao iniciar o rastreamento de tempo');
-      }
-
-      // Atualizar o tempo rastreado a cada segundo
-      interval = setInterval(() => {
-        const elapsedTime = Date.now() - startTime.value;
-        const seconds = Math.floor((elapsedTime / 1000) % 60);
-        const minutes = Math.floor((elapsedTime / (1000 * 60)) % 60);
-        const hours = Math.floor((elapsedTime / (1000 * 60 * 60)) % 24);
-        trackedTime.value = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-      }, 1000);
-    };
-
-    const stopTracking = () => {
-      isTracking.value = false;
-      if (interval) {
-        clearInterval(interval);
-      }
-      // Aqui você pode adicionar uma lógica para enviar o horário de fim ao backend, se necessário.
-    };
-
+   
     onMounted(() => {
       fetchTask();
       fetchProjects();
@@ -225,11 +180,9 @@ export default defineComponent({
       formatDate,
       activeTab,
       trackedTime,
-      isTracking,
-      startTracking,
-      stopTracking,
       hasOngoingTracker,
       onOngoingTracker,
+      fetchTask,
     };
   },
 });

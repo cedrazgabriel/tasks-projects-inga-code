@@ -21,7 +21,7 @@ namespace TaskManager.Application.UseCases.TimeTrackers
             this.collaboratorRepository = collaboratorRepository;
         }
 
-        public async Task<TimeTracker> Execute(Guid userId, Guid taskId, DateTime startDate, string timeZoneId, DateTime? endDate = null)
+        public async Task<TimeTracker> Execute(Guid userId, Guid taskId, string timeZoneId)
         {
             // Verifica se a tarefa existe
             var task = await taskRepository.GetTaskByIdAsync(taskId);
@@ -29,6 +29,9 @@ namespace TaskManager.Application.UseCases.TimeTrackers
             {
                 throw new ResourceNotFoundError();
             }
+
+            var startDate = DateTime.UtcNow;
+            DateTime? endDate = null;
 
             // Se endDate for nulo, ignorar validação de intervalo
             if (endDate.HasValue && startDate > endDate.Value)

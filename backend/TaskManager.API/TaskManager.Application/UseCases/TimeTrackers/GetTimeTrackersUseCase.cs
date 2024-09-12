@@ -11,9 +11,9 @@ namespace TaskManager.Application.UseCases.TimeTrackers
 {
     public class GetTimeTrackersByTaskIdUseCase(ITimeTrackerRepository timeTrackerRepository)
     {
-        public async Task<PaginatedResult<TimeTracker>> Execute(Guid taskId, int page, int pageSize)
+        public async Task<PaginatedResult<TimeTracker>> Execute(Guid taskId, int page, int pageSize, Guid? collaboratorId = null)
         {
-            var timeTrackers = await timeTrackerRepository.GetTimeTrackersWithFiltersPaginatedAsync(taskId, page, pageSize);
+            var timeTrackers = await timeTrackerRepository.GetTimeTrackersWithFiltersPaginatedAsync(taskId, page, pageSize, collaboratorId);
 
             return timeTrackers;
         }
