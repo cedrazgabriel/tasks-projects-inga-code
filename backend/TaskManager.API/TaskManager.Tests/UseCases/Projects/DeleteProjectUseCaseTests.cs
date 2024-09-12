@@ -16,7 +16,7 @@ namespace TaskManager.Tests.UseCases.Projects
         {
             // Arrange
             var inMemoryProjectRepository = new InMemoryProjectsRepository();
-            var mockCacheService = new Mock<ICacheService>(); // Utilizando Moq para o cache service
+            var mockCacheService = new Mock<ICacheService>(); 
 
             var useCase = new DeleteProjectUseCase(inMemoryProjectRepository, mockCacheService.Object);
 
