@@ -11,6 +11,7 @@
  - [Redis](https://redis.io/docs/latest/)
  - [xUnit](https://xunit.net/)
  - [Moq](https://github.com/devlooped/moq)
+ - [AutoMapper](https://automapper.org/)
 
 
  ## Como rodar o projeto.
