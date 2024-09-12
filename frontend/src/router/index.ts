@@ -44,7 +44,7 @@ const router = createRouter({
 });
 
 // Middleware para proteger rotas
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _, next) => {
     const isAuthenticated = AuthService.isAuthenticated();
 
 
