@@ -6,7 +6,7 @@ on:
       - master 
   pull_request:
     branches:
-      - master
+      - master 
 
 jobs:
   build:
@@ -23,18 +23,13 @@ jobs:
       with:
         dotnet-version: '8.x' 
 
-    # Navega até a pasta do backend
-    - name: Navigate to backend
-      run: cd backend/TaskManager.API
 
-    # Restaura as dependências
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore backend/TaskManager.API/TaskManager.API.csproj
 
-    # Compila o projeto
+
     - name: Build project
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build backend/TaskManager.API/TaskManager.API.csproj --configuration Release --no-restore
 
-    # Executa os testes
     - name: Run unit tests
-      run: dotnet test --configuration Release --no-build --verbosity normal
+      run: dotnet test backend/TaskManager.API/TaskManager.API.csproj --configuration Release --no-build --verbosity normal
