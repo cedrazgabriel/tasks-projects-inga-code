@@ -17,7 +17,7 @@
  ## Como rodar o projeto.
  Para conseguir executar esse projeto em sua máquina, é necessário seguir os seguintes passos
 
- 1 - Criar uma instância do banco de dados, eu utilizei docker compose para subir um banco, se não tiver Docker instalado em sua máquina, segue o link para instalação: https://docs.docker.com/engine/install/
+ 1 - Criar uma instância do banco de dados, eu utilizei docker compose para subir um banco juntamente com o redis(existe cache nos use cases de projects), se não tiver Docker instalado em sua máquina, segue o link para instalação: https://docs.docker.com/engine/install/
  Após a instalação, entrar na pasta TaskManager.API (onde se encontra a solution) e rodar o seguinte comando
 
  ```bash
