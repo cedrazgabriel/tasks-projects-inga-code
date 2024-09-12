@@ -46,7 +46,7 @@ import { getMetrics } from '../services/api/time-trackers/time-trackers-service'
 import { MetricsResponse } from '../services/api/time-trackers/types';
 
 export default defineComponent({
-  name: 'Dashboard',
+  name: 'DashboardView',
   setup() {
     const metrics = ref<MetricsResponse | null>(null);
 

@@ -59,6 +59,7 @@ export default defineComponent({
         const response = await getProjectById(props.projectId);
         project.value = response.data; 
       } catch (error) {
+        console.error(error)
         toast.error('Erro ao buscar projeto');
       } finally {
         isLoading.value = false;

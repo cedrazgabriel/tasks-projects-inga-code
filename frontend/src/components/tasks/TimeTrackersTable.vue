@@ -137,7 +137,7 @@ export default defineComponent({
 
         const fetchCollaborators = async () => {
             const response = await getCollaborators();
-            collaborators.value = response.data;
+            collaborators.value = response.data.data;
         };
 
         const startTracking = async () => {

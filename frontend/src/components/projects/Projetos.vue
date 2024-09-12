@@ -85,7 +85,7 @@ import { useToast } from 'vue-toastification';
 
 
 export default defineComponent({
-  name: 'Projetos',
+  name: 'ProjetosView',
   components: {
     EditProjetoModal, 
     CreateProjetoModal,

@@ -91,7 +91,7 @@ import EditTarefaModal from './EditTarefaModal.vue';
 import { useToast } from 'vue-toastification';
 
 export default defineComponent({
-  name: 'Tarefas',
+  name: 'TarefasView',
   components: {
     RingLoader,
     PhDotsThreeVertical,
