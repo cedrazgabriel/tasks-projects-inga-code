@@ -13,7 +13,7 @@ namespace TaskManager.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(TaskManagerDbContext))]
     [Migration("20240908194622_ajustetabelas")]
-    partial class ajustetabelas
+    partial class AjusteTabelas
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

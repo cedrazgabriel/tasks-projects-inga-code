@@ -2,5 +2,5 @@
 
 public class StopTimeTrackerRequest
 {
-    public string EndTime { get; set; }
+    public string EndTime { get; set; } = string.Empty;
 }

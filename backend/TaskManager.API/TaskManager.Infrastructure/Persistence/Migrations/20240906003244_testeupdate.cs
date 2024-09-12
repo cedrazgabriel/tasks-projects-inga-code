@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TaskManager.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class testeupdate : Migration
+    public partial class TesteUpdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

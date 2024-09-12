@@ -55,7 +55,7 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
             };
         }
 
-        public async Task<TaskProject> GetTaskByIdAsync(Guid id)
+        public async Task<TaskProject?> GetTaskByIdAsync(Guid id)
         {
             return await dbContext.Tasks
                 .Include(task => task.Project)

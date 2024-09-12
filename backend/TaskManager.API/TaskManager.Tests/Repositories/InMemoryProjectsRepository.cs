@@ -41,7 +41,7 @@ namespace TaskManager.Tests.Repositories
             return Task.FromResult(result);
         }
 
-        public Task<Project> GetProjectByIdAsync(Guid id)
+        public Task<Project?> GetProjectByIdAsync(Guid id)
         {
             var project = projects.FirstOrDefault(p => p.Id == id);
             return Task.FromResult(project);

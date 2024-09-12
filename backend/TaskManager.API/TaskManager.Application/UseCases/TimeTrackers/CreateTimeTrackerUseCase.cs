@@ -80,6 +80,10 @@ namespace TaskManager.Application.UseCases.TimeTrackers
             // Verifica se o colaborador existe
             var collaborator = await collaboratorRepository.GetByUserIdAsync(userId);
 
+            if (collaborator == null) {
+               throw new ResourceNotFoundError();
+            }
+
             // Cria um novo time tracker
             var timeTracker = new TimeTracker(startDate, timeZoneId, taskId, collaborator.Id);
 

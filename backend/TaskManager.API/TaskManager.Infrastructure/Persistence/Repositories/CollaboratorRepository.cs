@@ -22,7 +22,7 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
            return await dbContext.Collaborators.AsNoTracking().ToListAsync();
         }
 
-        public async Task<Collaborator> GetByUserIdAsync(Guid userId)
+        public async Task<Collaborator?> GetByUserIdAsync(Guid userId)
         {
             return await dbContext.Collaborators.Where(c => c.UserId == userId).FirstOrDefaultAsync();
         }

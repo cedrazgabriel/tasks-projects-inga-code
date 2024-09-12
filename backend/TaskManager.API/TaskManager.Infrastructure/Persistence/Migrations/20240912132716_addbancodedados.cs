@@ -5,7 +5,7 @@
 namespace TaskManager.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class addbancodedados : Migration
+    public partial class AddBancoDeDados : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

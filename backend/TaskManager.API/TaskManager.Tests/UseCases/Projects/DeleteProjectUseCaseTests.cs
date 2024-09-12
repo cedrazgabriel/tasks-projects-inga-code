@@ -31,7 +31,6 @@ namespace TaskManager.Tests.UseCases.Projects
             // Assert
             var deletedProject = await inMemoryProjectRepository.GetProjectByIdAsync(project.Id);
 
-          
             Assert.NotNull(deletedProject.DeletedAt);
             Assert.True(result);
 

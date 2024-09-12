@@ -70,7 +70,7 @@ builder.Services.AddDbContext<TaskManagerDbContext>(options =>
 
 
 //Redis
-var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
+var redisConnectionString = builder.Configuration.GetConnectionString("Redis") ?? "localhost:6379"; 
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
@@ -146,7 +146,7 @@ using (var scope = app.Services.CreateScope())
         var context = services.GetRequiredService<TaskManagerDbContext>();
         var hasher = services.GetRequiredService<IHashGenerator>();
 
-        SeedData(context, hasher);  // Chama o seed para criar os usuários
+        await SeedData(context, hasher);  // Chama o seed para criar os usuários
     }
     catch (Exception ex)
     {

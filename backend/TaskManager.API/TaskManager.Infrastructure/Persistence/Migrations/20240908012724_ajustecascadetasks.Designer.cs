@@ -13,7 +13,7 @@ namespace TaskManager.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(TaskManagerDbContext))]
     [Migration("20240908012724_ajustecascadetasks")]
-    partial class ajustecascadetasks
+    partial class AjusteCascadeTasks
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

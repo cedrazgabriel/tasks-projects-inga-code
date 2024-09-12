@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TaskManager.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class ajustetabelas : Migration
+    public partial class AjusteTabelas : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

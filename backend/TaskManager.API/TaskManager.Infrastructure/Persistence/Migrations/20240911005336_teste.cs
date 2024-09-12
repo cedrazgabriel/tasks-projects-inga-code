@@ -5,7 +5,7 @@
 namespace TaskManager.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class teste : Migration
+    public partial class Teste : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

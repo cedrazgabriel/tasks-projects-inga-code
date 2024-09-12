@@ -32,8 +32,8 @@ namespace TaskManager.Tests.UseCases.Projects
             await inMemoryProjectRepository.CreateAsync(project3);
 
             // Configura o mock para retornar null do cache
-            mockCacheService.Setup(cache => cache.GetAsync<PaginatedResult<Project>>(It.IsAny<string>()))
-                .ReturnsAsync((PaginatedResult<Project>)null);
+            mockCacheService.Setup(cache => cache.GetAsync<PaginatedResult<Project?>>(It.IsAny<string>()))
+                .ReturnsAsync((PaginatedResult<Project?>)null);
 
             int page = 1;
             int pageSize = 2;

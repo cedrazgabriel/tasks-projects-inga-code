@@ -36,7 +36,7 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
             };
         }
 
-        public Task<Project> GetProjectByIdAsync(Guid id)
+        public Task<Project?> GetProjectByIdAsync(Guid id)
         {
             return dbContext.Projects
                 .Where(project => project.DeletedAt == null)

@@ -5,7 +5,7 @@
 namespace TaskManager.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class ajustecascadetasks : Migration
+    public partial class AjusteCascadeTasks : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

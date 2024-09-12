@@ -66,7 +66,7 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
              await dbContext.SaveChangesAsync(); 
         }
 
-        public async Task<TimeTracker> Get(Guid id)
+        public async Task<TimeTracker?> Get(Guid id)
         {
           return await dbContext.TimeTrackers
                 .Where(tt => tt.Id == id)

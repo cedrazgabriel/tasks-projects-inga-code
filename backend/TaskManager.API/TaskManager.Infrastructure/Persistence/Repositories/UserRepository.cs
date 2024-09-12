@@ -16,7 +16,7 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
             await dbContext.Users.AddAsync(user);
             await dbContext.SaveChangesAsync();
         }
-        public async Task<User> FindByUserNameAsync(string username)
+        public async Task<User?> FindByUserNameAsync(string username)
         {
             return await dbContext.Users.FirstOrDefaultAsync(user => user.UserName == username);
         }

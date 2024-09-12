@@ -13,7 +13,7 @@ namespace TaskManager.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(TaskManagerDbContext))]
     [Migration("20240911005336_teste")]
-    partial class teste
+    partial class Teste
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

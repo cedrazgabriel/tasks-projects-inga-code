@@ -2,8 +2,8 @@
 {
     public class MetricsResponse
     {
-        public string TotalHoursSpentThisMonth { get; set; }
-        public string TotalHoursSpentToday {  get; set; }
-        public string TotalHoursSpentThisWeek { get; set; }
+        public string TotalHoursSpentThisMonth { get; set; } = string.Empty;
+        public string TotalHoursSpentToday {  get; set; } = string.Empty ;
+        public string TotalHoursSpentThisWeek { get; set; } = string.Empty;
     }
 }

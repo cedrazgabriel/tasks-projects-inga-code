@@ -2,16 +2,16 @@
 {
     public class TimeTrackerResponse
     {
-        public string Id { get; set; }
-        public string StartDate { get; set; }
-        public string EndDate { get; set; }
-        public string CollaboratorId { get; set; }
-        public string CollaboratorName { get; set; }
-        public string CreatedAt { get; set; }
-        public string TaskName { get; set; }
-        public string TaskId { get; set; }
-        public string UpdatedAt { get; set; }
-        public string ProjectId { get; set; }
-        public string ProjectName { get; set; }
+        public string Id { get; set; } = string.Empty;
+        public string StartDate { get; set; } = string.Empty;
+        public string? EndDate { get; set; } = string.Empty;
+        public string CollaboratorId { get; set; } = string.Empty;
+        public string CollaboratorName { get; set; } = string.Empty ;
+        public string CreatedAt { get; set; } = string.Empty;
+        public string TaskName { get; set; } = string.Empty;
+        public string TaskId { get; set; } = string.Empty;
+        public string? UpdatedAt { get; set; }
+        public string ProjectId { get; set; } = string.Empty;
+        public string ProjectName { get; set; } = string.Empty;
     }
 }

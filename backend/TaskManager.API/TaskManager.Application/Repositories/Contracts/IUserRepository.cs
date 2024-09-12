@@ -10,6 +10,6 @@ namespace TaskManager.Application.Repositories.Contracts
     public interface IUserRepository
     {
         public System.Threading.Tasks.Task CreateAsync(User user);
-        public Task<User> FindByUserNameAsync(string username);
+        public Task<User?> FindByUserNameAsync(string username);
     }
 }
