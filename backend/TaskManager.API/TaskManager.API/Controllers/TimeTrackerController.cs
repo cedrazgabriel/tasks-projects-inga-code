@@ -93,7 +93,7 @@ namespace TaskManager.API.Controllers
         }
 
         [HttpGet("metrics")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TaskResponse>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MetricsResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Retorna o total de horas gastas do usuário no mês, semana e dia.")]
