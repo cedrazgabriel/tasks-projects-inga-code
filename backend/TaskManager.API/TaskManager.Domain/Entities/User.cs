@@ -15,6 +15,7 @@ namespace TaskManager.Domain.Entities
         {
             UserName = username;
             Password = password;
+            CreatedAt = DateTime.UtcNow;
         }
 
         public string UserName { get; set; } 

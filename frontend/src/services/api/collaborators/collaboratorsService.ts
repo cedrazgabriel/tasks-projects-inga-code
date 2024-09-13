@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import apiClient from "../../apiClient";
-import { getCollaboratorsResponse } from "./types";
+import { Collaborator } from "./types";
 
-export const getCollaborators = (): Promise<AxiosResponse<getCollaboratorsResponse>> => {
-    return apiClient.get<getCollaboratorsResponse>('/collaborator');
+export const getCollaborators = (): Promise<AxiosResponse<Collaborator[]>> => {
+    return apiClient.get<Collaborator[]>('/collaborator');
 };

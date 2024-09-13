@@ -1,9 +1,8 @@
 <template>
     <div>
         <div>
-                  <button class="btn btn-success me-2" @click="startTracking"
-                    :disabled="isTracking">Iniciar</button>
-                </div>
+            <button class="btn btn-success me-2" @click="startTracking" :disabled="isTracking">Iniciar</button>
+        </div>
         <div class="filters">
             <label for="collaboratorFilter" class="form-label">Filtrar por colaborador</label>
             <select id="collaboratorFilter" class="form-control" v-model="selectedCollaboratorId">
@@ -80,7 +79,7 @@ export default defineComponent({
         const toast = useToast();
         const isTracking = ref(false);
 
-    
+
         const previousPage = () => {
             if (page.value > 1) {
                 page.value--;
@@ -121,23 +120,23 @@ export default defineComponent({
         };
 
         const fetchTimeTrackers = async () => {
-    const requestParams = {
-        page: page.value,
-        pageSize: pageSize.value,
-        collaboratorId: selectedCollaboratorId.value === "" ? undefined : selectedCollaboratorId.value,
-    };
+            const requestParams = {
+                page: page.value,
+                pageSize: pageSize.value,
+                collaboratorId: selectedCollaboratorId.value === "" ? undefined : selectedCollaboratorId.value,
+            };
 
-    const response = await getTimeTrackerByTaskId(requestParams, props.taskId);
+            const response = await getTimeTrackerByTaskId(requestParams, props.taskId);
 
-    timeTrackers.value = response.data.items;
-    totalPages.value = Math.ceil(response.data.totalRecords / pageSize.value);
+            timeTrackers.value = response.data.items;
+            totalPages.value = Math.ceil(response.data.totalRecords / pageSize.value);
 
-    isTracking.value = timeTrackers.value.some(tracker => tracker.endDate === null);
-};
+            isTracking.value = timeTrackers.value.some(tracker => tracker.endDate === null);
+        };
 
         const fetchCollaborators = async () => {
             const response = await getCollaborators();
-            collaborators.value = response.data.data;
+            collaborators.value = response.data;
         };
 
         const startTracking = async () => {

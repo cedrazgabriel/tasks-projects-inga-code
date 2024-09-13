@@ -25,7 +25,7 @@ public class CollaboratorController(ICollaboratorRepository collaboratorReposito
 
         var collaborators = await useCase.Execute();
 
-        var response = mapper.Map<CollaboratorResponse>(collaborators);
+        var response = mapper.Map<List<CollaboratorResponse>>(collaborators);
 
         return Ok(response);
     }

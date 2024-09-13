@@ -184,7 +184,16 @@ async Task SeedData(TaskManagerDbContext context, IHashGenerator hasher)
             new("user3", hashedPassword)
         };
 
+        var collaborators = new List<Collaborator>();
+
+        foreach (var user in users)
+        {
+            collaborators.Add(new Collaborator(user.UserName, user.Id));
+        }
+
+
         context.Users.AddRange(users);
+        context.Collaborators.AddRange(collaborators);
         context.SaveChanges();
     }
 }
