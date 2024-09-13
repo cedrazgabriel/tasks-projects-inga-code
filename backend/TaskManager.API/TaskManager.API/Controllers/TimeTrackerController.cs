@@ -70,7 +70,7 @@ namespace TaskManager.API.Controllers
         }
 
         [HttpGet("{taskId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TaskResponse>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaginatedResult<TaskResponse>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Retorna todas as tasks com a opção de filtrar os time trackers por tasks.")]
